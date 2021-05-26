@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisquare.springboot.dao.UserDao">
+    <select id="listUsers" resultType="com.yisquare.springboot.pojo.User">
+        select  user_code as userCode, user_name as userName, user_password as userPassword,phone,email,create_datetime as createDateTime from user;
+    </select>
+
+    <select id="getUserInfo" resultType="com.yisquare.springboot.pojo.User">
+        select  user_code as userCode, user_name as userName, user_password as userPassword,phone,email,create_datetime as createDateTime from user
+         where user_code = #{userCode};
+    </select>
+
+    <select id="listUsersByUserCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.User">
+        select user_code,user_name, phone,email,create_datetime from user
+        <where>
+            <if test =" code != null and code !=''">
+             and `user_code` like concat('%',#{code},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteUserByCode" parameterType="java.lang.String">
+        delete from user where user_code=#{userCode}
+    </delete>
+
+    <insert id="addUser" parameterType="com.yisquare.springboot.pojo.User" useGeneratedKeys="true" keyProperty="id" >
+        insert into user(user_code, user_name,user_password,phone,email) values (#{userCode},#{userName},#{userPassword},#{phone},#{email})
+    </insert>
+
+    <update id="updateUser" parameterType="com.yisquare.springboot.pojo.User">
+        update user set
+        user_name = #{userName},
+        user_password = #{userPassword},
+        email = #{email},
+        phone = #{phone}
+        where user_code = #{userCode}
+    </update>
+
+    <update id="updateUserByPatch" parameterType="com.yisquare.springboot.pojo.User">
+        update user
+        <set>
+        <if test="userName != null">
+            user_name = #{userName},
+        </if>
+        <if test = "userPassword != null">
+            user_password = #{userPassword},
+        </if>
+        <if test = "email != null">
+            email = #{email},
+        </if>
+        <if test = "phone != null">
+            phone = #{phone}
+        </if>
+        </set>
+        where user_code = #{userCode}
+    </update>
+
+    <select id="getSystemCodeByUserCode" parameterType="java.lang.String" resultType="int">
+        select count(1) from system_member where member_code=#{userCode};
+    </select>
+</mapper>
