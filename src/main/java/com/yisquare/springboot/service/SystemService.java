@@ -11,7 +11,15 @@ public interface SystemService {
 
     APIResponse<Boolean> deleteSystemInfo(String systemCode);
 
-    APIResponse<PageInfo<SystemInfo>> listSystemInfoByCode(QueryCondition queryCondition);
+    APIResponse<PageInfo<SystemInfo>> listSystemInfoByCode(QueryCondition queryCondition,String token);
 
     APIResponse<Boolean> createSystemInfo(SystemInfo systemInfo);
+
+    Integer getUserRole(String userCode);
+
+    APIResponse<Boolean> updateSystemInfo(SystemInfo systemInfo);
+
+    boolean hasDataPermit(String userCode,String systemCode);
+
+
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisquare.springboot.dao.TokenDao">
+    <select id="findByToken" parameterType="java.lang.String" resultType="com.yisquare.springboot.pojo.SysToken">
+        SELECT user_code, token, expire_dateTime, update_datetime
+        FROM token
+        WHERE token=#{token};
+    </select>
+
+    <select id="findByUserCode" parameterType="java.lang.String" resultType="com.yisquare.springboot.pojo.SysToken">
+        SELECT user_code, token, expire_dateTime, update_datetime
+        FROM token
+        WHERE user_code=#{userCode};
+    </select>
+
+    <insert id="saveToken" parameterType="com.yisquare.springboot.pojo.SysToken">
+        INSERT INTO token
+                (user_code, token, expire_dateTime)
+        VALUES( #{userCode}, #{token}, #{expireDateTime});
+    </insert>
+
+    <delete id="deleteToken" parameterType="string">
+        DELETE FROM token
+        WHERE token=#{token}
+    </delete>
+
+    <update id="updateToken" parameterType="com.yisquare.springboot.pojo.SysToken">
+        UPDATE token
+        SET token = #{token},
+        expire_dateTime=#{expireDateTime}
+        WHERE user_code = #{userCode}
+    </update>
+
+</mapper>

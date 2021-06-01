@@ -1,18 +1,20 @@
-package com.yisquare.springboot.service;
+package com.yisquare.springboot.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.PasswordProcess;
 import com.yisquare.springboot.dao.UserDao;
 import com.yisquare.springboot.dao.query.QueryCondition;
 import com.yisquare.springboot.pojo.User;
+import com.yisquare.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public APIResponse<User> addUser(User user) {
+        user.setUserPassword(PasswordProcess.makeMD5(user.getUserPassword()));
        int i =  userDao.addUser(user);
         if(i>0) {
             return APIResponse.success(user);

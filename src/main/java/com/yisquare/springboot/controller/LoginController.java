@@ -1,69 +1,67 @@
 package com.yisquare.springboot.controller;
 
 
+import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.PasswordProcess;
+import com.yisquare.springboot.dto.LoginDTO;
+import com.yisquare.springboot.pojo.SysToken;
 import com.yisquare.springboot.pojo.User;
+import com.yisquare.springboot.service.ShiroService;
+import com.yisquare.springboot.service.SystemService;
+import com.yisquare.springboot.service.UserService;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.subject.Subject;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login(User user) {
-        if (ObjectUtils.isEmpty(user.getUserName()) || ObjectUtils.isEmpty(user.getUserPassword())) {
-            return "请输入用户名和密码！";
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ShiroService shiroService;
+
+    @Autowired
+    private SystemService systemService;
+
+
+   // @ApiOperation(value = "登录",notes = "参数：用户名，密码")
+    @PostMapping("/login")
+    public APIResponse<SysToken> login(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+           return APIResponse.fail("登录失败",null);
         }
         //用户认证信息
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(
-                user.getUserName(),
-                user.getUserPassword()
-        );
-        try {
-            //进行验证，这里可以捕获异常，然后返回对应信息
-            subject.login(usernamePasswordToken);
-//            subject.checkRole("admin");
-//            subject.checkPermissions("query", "add");
-        } catch (UnknownAccountException e) {
-            log.error("用户名不存在！", e);
-            return "用户名不存在！";
-        } catch (AuthenticationException e) {
-            log.error("账号或密码错误！", e);
-            return "账号或密码错误！";
-        } catch (AuthorizationException e) {
-            log.error("没有权限！", e);
-            return "没有权限";
+
+        String userCode = loginDTO.getUserCode();
+        String password = PasswordProcess.makeMD5(loginDTO.getUserPassword());
+
+        APIResponse<User> userAPIResponse = userService.getUserInfo(userCode);
+        if(userAPIResponse.getStatus() == "success" && password.equals(userAPIResponse.getData().getUserPassword())){
+
+            SysToken sysToken = shiroService.createToken(userCode);
+            return APIResponse.success(sysToken);
+        }else{
+            return APIResponse.fail("账号或密码错误!",null);
         }
-        return "login success";
+
+
     }
 
-    @RequiresRoles("admin")
-    @GetMapping("/admin")
-    public String admin() {
-        return "admin success!";
+    @PostMapping("/logout")
+    public APIResponse<String>  logout(@RequestHeader(name = "token") String token){
+        if(token == null){
+            return APIResponse.fail("Token已经失效",null);
+        }
+        return shiroService.logout(token);
     }
 
-    @RequiresPermissions("query")
-    @GetMapping("/index")
-    public String index() {
-        return "index success!";
-    }
-
-    @RequiresPermissions("add")
-    @GetMapping("/add")
-    public String add() {
-        return "add success!";
-    }
 }

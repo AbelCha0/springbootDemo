@@ -11,4 +11,5 @@ public class QueryCondition {
     private Integer pageNum =1;
     private Integer pageSize = 2;
     private String code;
+    private String operateUserCode;
 }

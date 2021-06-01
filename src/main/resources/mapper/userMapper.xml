@@ -25,7 +25,7 @@
         delete from user where user_code=#{userCode}
     </delete>
 
-    <insert id="addUser" parameterType="com.yisquare.springboot.pojo.User" useGeneratedKeys="true" keyProperty="id" >
+    <insert id="addUser" parameterType="com.yisquare.springboot.pojo.User"  >
         insert into user(user_code, user_name,user_password,phone,email) values (#{userCode},#{userName},#{userPassword},#{phone},#{email})
     </insert>
 

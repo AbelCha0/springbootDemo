@@ -1,6 +1,9 @@
 server:
   port: 9090
 spring:
+  jackson:
+      time-zone: GMT+8
+      date-format: yyyy-MM-dd HH:mm:ss
   mvc:
     static-path-pattern: /**
     hiddenmethod:
@@ -34,4 +37,11 @@ shiro:
   web:
     enabled: true
   loginUrl: /login
+
+logging:
+  level:
+    com:
+      yisquare:
+        springboot:
+          dao: debug
 

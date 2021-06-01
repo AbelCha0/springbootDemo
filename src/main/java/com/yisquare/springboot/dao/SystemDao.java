@@ -14,6 +14,8 @@ public interface SystemDao {
 
     List<SystemInfo> listSystemInfoByCode(QueryCondition queryCondition);
 
+    List<SystemInfo>  listAllSystemInfoByCode(QueryCondition queryCondition);
+
     SystemInfo getSystemInfoByCode(String systemCode);
 
     int updateSystemInfo(SystemInfo systemInfo);
@@ -31,4 +33,6 @@ public interface SystemDao {
     int insertSystemMember(SystemInfo systemInfo);
 
     int insertSystemIP(SystemInfo systemInfo);
+
+    Integer getUserRole(String userCode);
 }

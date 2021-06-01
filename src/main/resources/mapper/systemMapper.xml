@@ -15,12 +15,26 @@
         select
             system.system_code, system.system_name, system.department, user.user_code,user.user_name,system.create_datetime,
             user.email, user.phone
-        from system_info system,user
-        where  system.owner = user.user_code
+        from system_info system,user, system_user_relation relation
+        where  system.system_code = relation.system_code
+        and system.owner = user.user_code
+        and relation.member_code= #{operateUserCode}
         <if test="code !=null and code != ''">
          and system_code  like concat('%',#{code},'%')
         </if>
 
+
+    </select>
+
+    <select id="listAllSystemInfoByCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultMap="systemInfoMap">
+    select
+    system.system_code, system.system_name, system.department, user.user_code,user.user_name,system.create_datetime,
+    user.email, user.phone
+    from system_info system,user
+    where system.owner = user.user_code
+    <if test="code !=null and code != ''">
+        and system_code  like concat('%',#{code},'%')
+    </if>
     </select>
 
     <select id="getSystemMemberInfo" resultType="com.yisquare.springboot.pojo.SystemMember">
@@ -48,9 +62,9 @@
             <result property="phone" column="phone"/>
             <result property="email" column="email"/>
         </association>
-        <collection  property="systemMember"  javaType = "java.util.ArrayList" ofType="com.yisquare.springboot.pojo.SystemMember" select="getSystemMemberInfo" column="system_code" resultMap="systemMemberMap" >
+        <collection  property="systemMember"  javaType = "java.util.ArrayList" ofType="com.yisquare.springboot.pojo.SystemMember" select="getSystemMemberInfo" column="system_code"  >
         </collection >
-        <collection property="ipAddress" ofType="java.lang.String" javaType="java.util.ArrayList" select ="getIpInfo" column="system_code"></collection>
+        <collection property="ipAddress" ofType="java.lang.String"  select ="getIpInfo" column="system_code"></collection>
     </resultMap>
 
 
@@ -72,18 +86,37 @@
 
     <insert id="insertSystemIP" >
          insert into system_ip (system_code, ip) values
-        <foreach collection="array" item ="item" open="(" separator="," close=")">
-            #{systemCode},#{item}
+        <foreach collection="ipAddress" item ="item" separator="," >
+            (#{systemCode},#{item})
         </foreach>;
     </insert>
 
     <insert id="insertSystemMember" parameterType="com.yisquare.springboot.pojo.SystemMember">
         insert into system_user_relation (system_code,role,member_code) values
-        <foreach collection="list" item="item" separator=",">
+        <foreach collection="systemMember" item="item" separator=",">
             (#{item.systemCode},
             #{item.role},
             #{item.memberCode})
         </foreach>
 
     </insert>
+
+    <select id="getUserRole" resultType="java.lang.Integer">
+        SELECT MIN(role) FROM system_user_relation
+        WHERE member_code =#{userCode}
+    </select>
+
+    <update id="updateSystemInfo">
+        update system_info set
+        system_name = #{systemName},
+        department = #{department},
+        owner = #{owner.userCode}
+        where system_code = #{systemCode}
+    </update>
+
+
+    <delete id="updateSystemInfoByPatch">
+    </delete>
+
+
 </mapper>
