@@ -2,6 +2,7 @@ package com.yisquare.springboot.service;
 
 import com.github.pagehelper.PageInfo;
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.dao.query.OperateCondition;
 import com.yisquare.springboot.dao.query.QueryCondition;
 import com.yisquare.springboot.pojo.SystemInfo;
 
@@ -11,7 +12,7 @@ public interface SystemService {
 
     APIResponse<Boolean> deleteSystemInfo(String systemCode);
 
-    APIResponse<PageInfo<SystemInfo>> listSystemInfoByCode(QueryCondition queryCondition,String token);
+    APIResponse<PageInfo<SystemInfo>> listSystemInfoByCode(QueryCondition queryCondition);
 
     APIResponse<Boolean> createSystemInfo(SystemInfo systemInfo);
 
@@ -19,7 +20,7 @@ public interface SystemService {
 
     APIResponse<Boolean> updateSystemInfo(SystemInfo systemInfo);
 
-    boolean hasDataPermit(String userCode,String systemCode);
+
 
 
 }

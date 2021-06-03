@@ -15,8 +15,8 @@
     <select id="listUsersByUserCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.User">
         select user_code,user_name, phone,email,create_datetime from user
         <where>
-            <if test =" code != null and code !=''">
-             and `user_code` like concat('%',#{code},'%')
+            <if test ="systemCode != null and systemCode != ''">
+                and `user_code` like concat('%',#{systemCode},'%')
             </if>
         </where>
     </select>
@@ -58,6 +58,6 @@
     </update>
 
     <select id="getSystemCodeByUserCode" parameterType="java.lang.String" resultType="int">
-        select count(1) from system_member where member_code=#{userCode};
+        select count(1) from system_user_relation where member_code=#{userCode};
     </select>
 </mapper>

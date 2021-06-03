@@ -3,8 +3,10 @@ package com.yisquare.springboot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
+@EnableOpenApi
 public class SystemManagerApplication {
 
 

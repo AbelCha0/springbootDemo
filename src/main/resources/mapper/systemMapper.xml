@@ -5,22 +5,18 @@
 <mapper namespace="com.yisquare.springboot.dao.SystemDao">
     <select id="getSystemInfoByCode" parameterType="java.lang.String" resultMap="systemInfoMap">
         select
-            system.system_code, system.system_name, system.department, user.user_code,user.user_name,system.create_datetime,
-            user.email, user.phone
-        from system_info system,user
-        where  system.owner = user.user_code
-        and system_code = #{systemCode};
+        distinct systemInfo.system_code, systemInfo.system_name, systemInfo.department,systemInfo.create_datetime
+        from system_info systemInfo
+        where  system_code = #{systemCode};
     </select>
     <select id="listSystemInfoByCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultMap="systemInfoMap">
         select
-            system.system_code, system.system_name, system.department, user.user_code,user.user_name,system.create_datetime,
-            user.email, user.phone
-        from system_info system,user, system_user_relation relation
-        where  system.system_code = relation.system_code
-        and system.owner = user.user_code
+        distinct systemInfo.system_code, systemInfo.system_name, systemInfo.department,systemInfo.create_datetime
+        from system_info systemInfo, system_user_relation relation
+        where  systemInfo.system_code = relation.system_code
         and relation.member_code= #{operateUserCode}
-        <if test="code !=null and code != ''">
-         and system_code  like concat('%',#{code},'%')
+        <if test="systemCode != null and systemCode != ''">
+            and system_code like concat('%',#{systemCode},'%')
         </if>
 
 
@@ -28,13 +24,13 @@
 
     <select id="listAllSystemInfoByCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultMap="systemInfoMap">
     select
-    system.system_code, system.system_name, system.department, user.user_code,user.user_name,system.create_datetime,
-    user.email, user.phone
-    from system_info system,user
-    where system.owner = user.user_code
-    <if test="code !=null and code != ''">
-        and system_code  like concat('%',#{code},'%')
+    system_code, system_name, department, create_datetime
+    from system_info
+    <where>
+    <if test="systemCode != null and systemCode != ''">
+        system_code like concat('%',#{systemCode},'%')
     </if>
+    </where>
     </select>
 
     <select id="getSystemMemberInfo" resultType="com.yisquare.springboot.pojo.SystemMember">
@@ -56,12 +52,6 @@
         <result property="systemName" column="system_name"/>
         <result property="department" column="department"/>
         <result property="createDatetime" column="create_datetime"/>
-        <association property="owner" javaType="com.yisquare.springboot.pojo.User">
-            <id property="userCode" column="user_code"/>
-            <result property="userName" column="user_name"/>
-            <result property="phone" column="phone"/>
-            <result property="email" column="email"/>
-        </association>
         <collection  property="systemMember"  javaType = "java.util.ArrayList" ofType="com.yisquare.springboot.pojo.SystemMember" select="getSystemMemberInfo" column="system_code"  >
         </collection >
         <collection property="ipAddress" ofType="java.lang.String"  select ="getIpInfo" column="system_code"></collection>
@@ -81,7 +71,7 @@
     </delete>
 
     <insert id="createSystemInfo" parameterType="com.yisquare.springboot.pojo.SystemInfo">
-        insert into system_info (system_code,system_name,department,owner) values (#{systemCode},#{systemName},#{department},#{owner.userCode});
+        insert into system_info (system_code,system_name,department) values (#{systemCode},#{systemName},#{department});
     </insert>
 
     <insert id="insertSystemIP" >
@@ -109,14 +99,18 @@
     <update id="updateSystemInfo">
         update system_info set
         system_name = #{systemName},
-        department = #{department},
-        owner = #{owner.userCode}
+        department = #{department}
         where system_code = #{systemCode}
     </update>
 
 
-    <delete id="updateSystemInfoByPatch">
-    </delete>
+    <select id="hasPermit" parameterType="com.yisquare.springboot.dao.query.OperateCondition"
+            resultType="java.lang.Integer">
+        select count(1) from system_user_relation
+        where system_code = #{systemCode} and member_code=#{userCode}
+        <if test="operate != null and operate != @com.yisquare.springboot.common.constraint.Operate@SELECT">
+        and (role =1 or role =2)
+        </if>
 
-
+    </select>
 </mapper>

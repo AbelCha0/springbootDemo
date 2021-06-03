@@ -1,11 +1,10 @@
 package com.yisquare.springboot.shiro.auth;
 
 import com.yisquare.springboot.common.APIResponse;
-import com.yisquare.springboot.pojo.Role;
+import com.yisquare.springboot.common.constraint.Role;
 import com.yisquare.springboot.pojo.SysToken;
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.ShiroService;
-import com.yisquare.springboot.service.SystemService;
 import com.yisquare.springboot.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -39,13 +38,18 @@ public class AuthRealm extends AuthorizingRealm {
         int roleID = shiroService.getRoleID(user.getUserCode());
         switch (roleID) {
             case  0:
-                simpleAuthorizationInfo.addRole(Role.SYSADMIN.getRoleName());
+                simpleAuthorizationInfo.addRole(Role.SUPERADMIN.getRoleName());
+
                 break;
             case 1:
-                simpleAuthorizationInfo.addRole(Role.SYSMEMBER.getRoleName());
+                simpleAuthorizationInfo.addRole(Role.SYSADMIN.getRoleName());
+
                 break;
             case 2:
-                simpleAuthorizationInfo.addRole(Role.SUPERADMIN.getRoleName());
+                simpleAuthorizationInfo.addRole(Role.SYSOWNER.getRoleName());
+                break;
+            case 3:
+                simpleAuthorizationInfo.addRole(Role.SYSMEMBER.getRoleName());
                 break;
         }
         return simpleAuthorizationInfo;
@@ -53,7 +57,7 @@ public class AuthRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-//获取token，既前端传入的token
+         //获取token，既前端传入的token
         String accessToken = (String) token.getPrincipal();
         //1. 根据accessToken，查询用户信息
         SysToken tokenEntity = shiroService.findByToken(accessToken);

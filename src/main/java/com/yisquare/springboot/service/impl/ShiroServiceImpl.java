@@ -1,12 +1,15 @@
 package com.yisquare.springboot.service.impl;
 
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.constraint.Operate;
 import com.yisquare.springboot.dao.SystemDao;
 import com.yisquare.springboot.dao.TokenDao;
+import com.yisquare.springboot.dao.query.OperateCondition;
 import com.yisquare.springboot.pojo.SysToken;
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.ShiroService;
 import com.yisquare.springboot.shiro.auth.TokenGenerator;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +75,9 @@ public class ShiroServiceImpl implements ShiroService {
     @Override
     public SysToken findByToken(String accessToken) {
        SysToken sysToken = tokenDao.findByToken(accessToken);
-        sysToken.setRoleID(getRoleID(sysToken.getUserCode()));
+       if(sysToken!=null) {
+           sysToken.setRoleID(getRoleID(sysToken.getUserCode()));
+       }
         return sysToken;
     }
 
@@ -87,14 +92,31 @@ public class ShiroServiceImpl implements ShiroService {
     public int getRoleID(String userCode){
         Integer roleID = null ;
         if("Admin".equals(userCode)){
-            roleID = 2;
+            roleID = 0;
         }else {
             roleID = systemDao.getUserRole(userCode);
         }
         if(roleID == null){
-            roleID = 1;
+            roleID = 3;
         }
 
         return roleID;
+    }
+
+    @Override
+    public boolean hasSystemPermit(String systemCode, Operate operate) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user == null){
+            return  false;
+        }
+        OperateCondition operateCondition = new OperateCondition();
+        operateCondition.setSystemCode(systemCode);
+        operateCondition.setUserCode(user.getUserCode());
+        operateCondition.setOperate(operate);
+
+        if("Admin".equals(user.getUserCode())){
+            return true;
+        }
+        return 0==systemDao.hasPermit(operateCondition)? false: true;
     }
 }

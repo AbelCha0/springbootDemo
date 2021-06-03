@@ -3,14 +3,14 @@ package com.yisquare.springboot.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.constraint.Operate;
+import com.yisquare.springboot.common.constraint.Role;
 import com.yisquare.springboot.dao.SystemDao;
-import com.yisquare.springboot.dao.TokenDao;
 import com.yisquare.springboot.dao.query.QueryCondition;
-import com.yisquare.springboot.pojo.SysToken;
-import com.yisquare.springboot.pojo.SystemInfo;
-import com.yisquare.springboot.pojo.SystemMember;
+import com.yisquare.springboot.pojo.*;
 import com.yisquare.springboot.service.ShiroService;
 import com.yisquare.springboot.service.SystemService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,12 @@ public class SystemServiceImpl implements SystemService {
 
     @Override
     public APIResponse<SystemInfo> getSystemInfoByCode(String systemCode) {
-        return APIResponse.success(systemDao.getSystemInfoByCode(systemCode));
+
+        if(shiroService.hasSystemPermit(systemCode,Operate.SELECT)) {
+            return APIResponse.success(systemDao.getSystemInfoByCode(systemCode));
+        }else{
+            return APIResponse.fail(String.format("你没有权限对%s进行该操作!",systemCode),null);
+        }
     }
 
     @Override
@@ -47,14 +52,16 @@ public class SystemServiceImpl implements SystemService {
     }
 
     @Override
-    public APIResponse<PageInfo<SystemInfo>> listSystemInfoByCode(QueryCondition queryCondition,String token) {
-        SysToken sysToken =shiroService.findByToken(token);
+    public APIResponse<PageInfo<SystemInfo>> listSystemInfoByCode(QueryCondition queryCondition) {
+       // SysToken sysToken =shiroService.findByToken(token);
+        //获取当前登录用户
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
         PageHelper.startPage(queryCondition.getPageNum(),queryCondition.getPageSize());
 
-        if(sysToken.getRoleID() == 2){//管理员查询所有的系统
+        if(shiroService.getRoleID(user.getUserCode()) == Role.SUPERADMIN.getRoleID()){//管理员查询所有的系统
             return APIResponse.success(new PageInfo<SystemInfo>(systemDao.listAllSystemInfoByCode(queryCondition)));
         }else{//查询与自己权限相关的系统
-            queryCondition.setOperateUserCode(sysToken.getUserCode());
+            queryCondition.setOperateUserCode(user.getUserCode());
             return APIResponse.success(new PageInfo<SystemInfo>(systemDao.listSystemInfoByCode(queryCondition)));
         }
 
@@ -88,28 +95,28 @@ public class SystemServiceImpl implements SystemService {
     @Override
     @Transactional
     public APIResponse<Boolean> updateSystemInfo(SystemInfo systemInfo) {
+        if(shiroService.hasSystemPermit(systemInfo.getSystemCode(),Operate.UPDATE)) {
+            int resultCode = systemDao.updateSystemInfo(systemInfo);
+            if (resultCode > 0) {
+                String systemCode = systemInfo.getSystemCode();
+                String[] ipAddress = systemInfo.getIpAddress();
+                List<SystemMember> systemMember = systemInfo.getSystemMember();
+                systemDao.deleteSystemIP(systemCode);
+                systemDao.deleteSystemMember(systemCode);
+                if (ipAddress != null && ipAddress.length > 0) {
 
-        int resultCode = systemDao.updateSystemInfo(systemInfo);
-        if(resultCode > 0) {
-            String systemCode = systemInfo.getSystemCode();
-            String[] ipAddress = systemInfo.getIpAddress();
-            List<SystemMember> systemMember = systemInfo.getSystemMember();
-            systemDao.deleteSystemIP(systemCode);
-            systemDao.deleteSystemMember(systemCode);
-            if (ipAddress != null && ipAddress.length > 0) {
+                    systemDao.insertSystemIP(systemInfo);
+                }
+                if (systemMember != null && systemMember.size() > 0) {
 
-                systemDao.insertSystemIP(systemInfo);
+                    systemDao.insertSystemMember(systemInfo);
+                }
             }
-            if (systemMember != null && systemMember.size() > 0) {
-
-                systemDao.insertSystemMember(systemInfo);
-            }
+            return APIResponse.success(true);
+        }else{
+            return APIResponse.fail(String.format("你没有权限对%s进行该操作!",systemInfo.getSystemCode()),null);
         }
-        return APIResponse.success(true);
     }
 
-    @Override
-    public boolean hasDataPermit(String userCode, String systemCode) {
-        return false;
-    }
+
 }

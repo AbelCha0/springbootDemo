@@ -44,4 +44,7 @@ logging:
       yisquare:
         springboot:
           dao: debug
-
+springfox:
+  documentation:
+    swagger-ui:
+      enabled=true:

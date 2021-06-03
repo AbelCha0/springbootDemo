@@ -1,10 +1,12 @@
-package com.yisquare.springboot.pojo;
+package com.yisquare.springboot.common.constraint;
 
 
 public enum Role {
-    SYSADMIN(0,"systemAdmin"),
-    SYSMEMBER(1,"systemMember"),
-    SUPERADMIN(2,"superAdmin");
+    SUPERADMIN(0,"superAdmin"),
+    SYSADMIN(1,"systemAdmin"),
+    SYSOWNER(2,"systemOwner"),
+    SYSMEMBER(3,"systemMember");
+
     private String roleName;
     private int roleID;
 

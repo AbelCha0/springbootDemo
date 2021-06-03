@@ -1,6 +1,7 @@
 package com.yisquare.springboot.dao;
 
 
+import com.yisquare.springboot.dao.query.OperateCondition;
 import com.yisquare.springboot.dao.query.QueryCondition;
 import com.yisquare.springboot.pojo.SystemInfo;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,8 +21,6 @@ public interface SystemDao {
 
     int updateSystemInfo(SystemInfo systemInfo);
 
-    int updateSystemInfoByPatch(SystemInfo systemInfo);
-
     int createSystemInfo(SystemInfo systemInfo);
 
     int deleteSystemInfo(String systemCode);
@@ -35,4 +34,6 @@ public interface SystemDao {
     int insertSystemIP(SystemInfo systemInfo);
 
     Integer getUserRole(String userCode);
+
+    int hasPermit(OperateCondition operateCondition);
 }

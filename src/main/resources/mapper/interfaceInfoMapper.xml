@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisquare.springboot.dao.InterfaceDao">
+
+    <select id="listInterface" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
+        SELECT system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
+        FROM interfaceinfo
+        WHERE system_code=#{systemCode}
+        <if test="queryStr != null  and queryStr !=''">
+            and API_code like concat('%',#{queryStr},'%')
+        </if>
+    </select>
+
+    <delete id="deleteInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">
+        DELETE FROM interfaceinfo
+        WHERE system_code=#{systemCode}
+        and API_code=#{apiCode};
+    </delete>
+
+    <insert id="addInterface">
+        INSERT INTO interfaceinfo
+                (system_code, API_code, API_name, version, api_doc_uri)
+        VALUES(#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl});
+
+    </insert>
+
+    <update id="updateInterface">
+        UPDATE interfaceinfo
+        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl}
+        WHERE system_code=#{systemCode}
+        and API_code=#{apiCode};
+
+    </update>
+
+    <select id="getInterfaceInfoByID" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
+        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
+        FROM interfaceinfo
+        WHERE id=#{id}
+    </select>
+</mapper>

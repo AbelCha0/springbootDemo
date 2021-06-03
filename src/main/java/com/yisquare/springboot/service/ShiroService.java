@@ -1,10 +1,9 @@
 package com.yisquare.springboot.service;
 
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.constraint.Operate;
 import com.yisquare.springboot.pojo.SysToken;
-import com.yisquare.springboot.pojo.User;
 
-import java.util.Map;
 
 public interface ShiroService {
 
@@ -18,4 +17,6 @@ public interface ShiroService {
     SysToken findByUserCode(String userCode);
 
     int getRoleID(String userCode);
+
+    boolean hasSystemPermit(String systemCode, Operate operate);
 }

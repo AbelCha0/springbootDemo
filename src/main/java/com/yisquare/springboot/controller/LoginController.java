@@ -10,6 +10,8 @@ import com.yisquare.springboot.service.ShiroService;
 import com.yisquare.springboot.service.SystemService;
 import com.yisquare.springboot.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+
+@Api(tags = "登录")
 @RestController
 @Slf4j
 public class LoginController {
@@ -33,11 +37,11 @@ public class LoginController {
     private SystemService systemService;
 
 
-   // @ApiOperation(value = "登录",notes = "参数：用户名，密码")
+    @ApiOperation(value = "登录",notes = "参数：用户名，密码")
     @PostMapping("/login")
     public APIResponse<SysToken> login(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-           return APIResponse.fail("登录失败",null);
+        if (bindingResult.hasErrors()) {
+            APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
         }
         //用户认证信息
 
@@ -56,6 +60,7 @@ public class LoginController {
 
     }
 
+    @ApiOperation("登出用户")
     @PostMapping("/logout")
     public APIResponse<String>  logout(@RequestHeader(name = "token") String token){
         if(token == null){

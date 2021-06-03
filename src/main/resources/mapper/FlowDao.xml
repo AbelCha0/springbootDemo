@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisquare.springboot.dao.FlowDao">
+
+    <select id="listFlowServiceByName" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.Flow">
+        SELECT  system_code, flowservice_name, description, create_datetime
+        FROM flowservice
+        WHERE system_code = #{systemCode}
+        <if test="queryStr != null  and queryStr !=''">
+            and flowservice_name like concat('%',#{queryStr},'%')
+        </if>
+    </select>
+
+    <delete id="deleteFlowService"  parameterType="com.yisquare.springboot.pojo.Flow">
+        DELETE FROM flowservice
+        WHERE system_code = #{systemCode}
+        and  flowservice_name = #{flowServiceName}
+    </delete>
+
+    <insert id="addFlowService" parameterType="com.yisquare.springboot.pojo.Flow">
+        INSERT INTO flowservice
+                (system_code, flowservice_name, description)
+        VALUES(#{systemCode}, #{flowServiceName}, #{description});
+    </insert>
+
+    <select id="getFlowByID" resultType="com.yisquare.springboot.pojo.Flow">
+        SELECT  id,system_code, flowservice_name, description, create_datetime
+        FROM flowservice
+        WHERE id = #{id}
+    </select>
+</mapper>
