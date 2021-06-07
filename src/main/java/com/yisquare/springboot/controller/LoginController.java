@@ -2,6 +2,7 @@ package com.yisquare.springboot.controller;
 
 
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.JwtUtil;
 import com.yisquare.springboot.common.PasswordProcess;
 import com.yisquare.springboot.dto.LoginDTO;
 import com.yisquare.springboot.pojo.SysToken;
@@ -14,12 +15,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Api(tags = "登录")
@@ -33,8 +32,6 @@ public class LoginController {
     @Autowired
     private ShiroService shiroService;
 
-    @Autowired
-    private SystemService systemService;
 
 
     @ApiOperation(value = "登录",notes = "参数：用户名，密码")
@@ -49,10 +46,17 @@ public class LoginController {
         String password = PasswordProcess.makeMD5(loginDTO.getUserPassword());
 
         APIResponse<User> userAPIResponse = userService.getUserInfo(userCode);
-        if(userAPIResponse.getStatus() == "success" && password.equals(userAPIResponse.getData().getUserPassword())){
 
-            SysToken sysToken = shiroService.createToken(userCode);
-            return APIResponse.success(sysToken);
+        if("success".equals(userAPIResponse.getStatus()) ){
+            String secret = userAPIResponse.getData().getUserPassword();
+           if( secret.equals(password)) {
+               SysToken sysToken = shiroService.createToken(userCode, secret);
+               return APIResponse.success(sysToken);
+           }
+           else{
+               return APIResponse.fail("账号或密码错误!",null);
+           }
+
         }else{
             return APIResponse.fail("账号或密码错误!",null);
         }
@@ -61,12 +65,21 @@ public class LoginController {
     }
 
     @ApiOperation("登出用户")
-    @PostMapping("/logout")
-    public APIResponse<String>  logout(@RequestHeader(name = "token") String token){
+    @GetMapping("/logout")
+    public APIResponse<String>  logout(@RequestHeader(name = "token",required = false) String token){
         if(token == null){
-            return APIResponse.fail("Token已经失效",null);
+            return APIResponse.fail("Token为空",null);
         }
-        return shiroService.logout(token);
+        String userCode =JwtUtil.getUserCode(token);
+        if(!ObjectUtils.isEmpty(userCode)) {
+            APIResponse<User> userAPIResponse = userService.getUserInfo(userCode);
+            if(userAPIResponse.getStatus() == "success" && userCode.equals(userAPIResponse.getData().getUserCode())){
+                return shiroService.logout(token);
+            }
+        }
+        return APIResponse.fail("Token非法或者无效",null);
+
+
     }
 
 }

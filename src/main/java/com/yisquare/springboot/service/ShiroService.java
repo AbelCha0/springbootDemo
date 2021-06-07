@@ -8,13 +8,9 @@ import com.yisquare.springboot.pojo.SysToken;
 public interface ShiroService {
 
 
-    SysToken createToken(String userCode);
+    SysToken createToken(String userCode,String secret);
 
-    APIResponse<String> logout(String token);
-
-    SysToken findByToken(String accessToken);
-
-    SysToken findByUserCode(String userCode);
+    APIResponse<String> logout(String userCode);
 
     int getRoleID(String userCode);
 

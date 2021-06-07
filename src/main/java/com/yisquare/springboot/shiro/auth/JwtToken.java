@@ -1,16 +1,16 @@
 package com.yisquare.springboot.shiro.auth;
 
 
-import lombok.Getter;
-import lombok.Setter;
+
 import org.apache.shiro.authc.AuthenticationToken;
 
 
-public class AuthToken implements AuthenticationToken {
+public class JwtToken implements AuthenticationToken {
 
+    private static final long serialVersionUID = -3317557159974645241L;
     private String token;
 
-    public AuthToken(String token){
+    public JwtToken(String token){
         this.token = token;
     }
 

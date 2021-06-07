@@ -3,9 +3,6 @@ package com.yisquare.springboot.shiro;
 
 import com.yisquare.springboot.shiro.auth.AuthFilter;
 import com.yisquare.springboot.shiro.auth.AuthRealm;
-import com.yisquare.springboot.shiro.auth.AuthToken;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -26,15 +23,6 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-
-//    @Bean("credentialsMatcher")
-//    public HashedCredentialsMatcher hashedCredentialsMatcher(){
-//        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
-//        credentialsMatcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
-//        credentialsMatcher.setHashIterations(1024);
-//        credentialsMatcher.setStoredCredentialsHexEncoded(true);
-//        return credentialsMatcher;
-//    }
 
     @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager){

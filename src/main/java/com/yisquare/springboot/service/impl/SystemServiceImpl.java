@@ -87,10 +87,6 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-    @Override
-    public Integer getUserRole(String userCode) {
-        return systemDao.getUserRole(userCode);
-    }
 
     @Override
     @Transactional
