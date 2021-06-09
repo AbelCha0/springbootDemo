@@ -36,9 +36,9 @@ public class ShiroServiceImpl implements ShiroService {
 
 
     @Override
-    public SysToken createToken(String userCode,String secret) {
+    public SysToken createToken(String userCode) {
         //生成一个token
-        String token = JwtUtil.sign(userCode,secret);
+        String token = JwtUtil.sign(userCode);
         //当前时间
         LocalDateTime now = LocalDateTime.now();
         //过期时间

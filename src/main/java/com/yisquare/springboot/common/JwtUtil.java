@@ -18,10 +18,12 @@ public class JwtUtil {
 
     public static final long EXPIRE_TIME = 10 * 60 * 1000;
 
-    public static boolean verify(String token, String secret) {
+    public static final String SECRET = "AUYB(&%T%43SKQLJH*7P0#!123";
+
+    public static boolean verify(String token) {
         try {
             //根据密码生成JWT效验器
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
             JWTVerifier verifier = JWT.require(algorithm)
                     .withClaim("userCode", getUserCode(token))
                     .build();
@@ -50,12 +52,11 @@ public class JwtUtil {
 
     /**
      * @param userCode 用户Code
-     * @param secret   制作此token的签名依据
      * @return 加密的token
      */
-    public static String sign(String userCode, String secret) {
+    public static String sign(String userCode) {
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(SECRET);
         return JWT.create()
                 .withClaim("userCode", userCode)
                 .withExpiresAt(date)

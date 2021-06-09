@@ -84,9 +84,6 @@ public class ShiroConfig {
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
-
-  /*defaultAdvisorAutoProxyCreator.setUsePrefix(true);
-        defaultAdvisorAutoProxyCreator.setAdvisorBeanNamePrefix("_no_advisor");*/
         return defaultAdvisorAutoProxyCreator;
     }
 

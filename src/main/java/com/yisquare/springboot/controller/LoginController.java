@@ -50,7 +50,7 @@ public class LoginController {
         if("success".equals(userAPIResponse.getStatus()) ){
             String secret = userAPIResponse.getData().getUserPassword();
            if( secret.equals(password)) {
-               SysToken sysToken = shiroService.createToken(userCode, secret);
+               SysToken sysToken = shiroService.createToken(userCode);
                return APIResponse.success(sysToken);
            }
            else{

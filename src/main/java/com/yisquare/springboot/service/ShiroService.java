@@ -8,7 +8,7 @@ import com.yisquare.springboot.pojo.SysToken;
 public interface ShiroService {
 
 
-    SysToken createToken(String userCode,String secret);
+    SysToken createToken(String userCode);
 
     APIResponse<String> logout(String userCode);
 

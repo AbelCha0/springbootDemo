@@ -80,7 +80,7 @@ public class AuthRealm extends AuthorizingRealm {
         if (apiResponse.getData() == null) {
             throw new UnknownAccountException("用户不存在!");
         }
-        if(!JwtUtil.verify(accessToken,apiResponse.getData().getUserPassword())){
+        if(!JwtUtil.verify(accessToken)){
             throw new IncorrectCredentialsException("token非法，请重新登录");
         }
 
