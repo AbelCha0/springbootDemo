@@ -28,8 +28,8 @@ public class InterfaceController {
     }
 
     @ApiOperation("查询某系统编码下的所有API信息")
-    @GetMapping ("/listInterface")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @PostMapping ("/listInterface")
+    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner","systemMember"},logical= Logical.OR)
     public APIResponse listInterfaceInfo(@RequestBody  @Validated QueryCondition queryCondition, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);

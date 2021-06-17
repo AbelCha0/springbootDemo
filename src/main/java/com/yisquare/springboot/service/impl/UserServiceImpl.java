@@ -6,16 +6,18 @@ import com.yisquare.springboot.common.APIResponse;
 import com.yisquare.springboot.common.PasswordProcess;
 import com.yisquare.springboot.dao.UserDao;
 import com.yisquare.springboot.dao.query.QueryCondition;
+import com.yisquare.springboot.dto.LoginDTO;
+
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    @Resource
     private UserDao userDao;
 
     @Override
@@ -28,11 +30,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public APIResponse<PageInfo<User>> listUsersByUserCode(QueryCondition userQuery) {
         PageHelper.startPage(userQuery.getPageNum(),userQuery.getPageSize());
-        return  APIResponse.success(new PageInfo<User>(userDao.listUsersByUserCode(userQuery)));
+        return  APIResponse.success(new PageInfo<>(userDao.listUsersByUserCode(userQuery)));
     }
 
     @Override
     public APIResponse<User> getUserInfo(String userCode) {
+
         return APIResponse.success(userDao.getUserInfo(userCode));
     }
 
@@ -52,8 +55,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public APIResponse<User> addUser(User user) {
+
+        if(null != userDao.getUserInfo(user.getUserCode())){
+            return APIResponse.fail(String.format("用户编码%s已经存在",user.getUserCode()),null);
+        }
+
         user.setUserPassword(PasswordProcess.makeMD5(user.getUserPassword()));
-       int i =  userDao.addUser(user);
+        int i =  userDao.addUser(user);
         if(i>0) {
             return APIResponse.success(user);
         }else{
@@ -80,4 +88,19 @@ public class UserServiceImpl implements UserService {
             return APIResponse.fail("更新用户失败",false);
         }
     }
+
+    @Override
+    public User login(LoginDTO loginDTO) {
+        String userCode = loginDTO.getUserCode();
+        String password = PasswordProcess.makeMD5(loginDTO.getUserPassword());
+
+        User user = userDao.getUserInfo(userCode);
+
+        if (null != user && password.equals(user.getUserPassword())) {
+            return user;
+        } else {
+            return null;
+        }
+    }
+
 }

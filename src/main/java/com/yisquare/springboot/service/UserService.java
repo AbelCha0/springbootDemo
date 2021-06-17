@@ -3,6 +3,7 @@ package com.yisquare.springboot.service;
 import com.github.pagehelper.PageInfo;
 import com.yisquare.springboot.common.APIResponse;
 import com.yisquare.springboot.dao.query.QueryCondition;
+import com.yisquare.springboot.dto.LoginDTO;
 import com.yisquare.springboot.pojo.User;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface UserService {
     APIResponse<Boolean> updateUser(User user);
 
     APIResponse<Boolean> updateUserByPatch(User user);
+
+    User login(LoginDTO loginDTO);
 
 }

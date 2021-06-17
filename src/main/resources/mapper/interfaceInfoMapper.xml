@@ -5,11 +5,14 @@
 <mapper namespace="com.yisquare.springboot.dao.InterfaceDao">
 
     <select id="listInterface" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
-        FROM interfaceinfo
-        WHERE system_code=#{systemCode}
+        SELECT inter.id,inter.system_code as systemCode, sys.system_name as systemName ,inter.API_code as apiCode, inter.API_name as apiName, inter.version, inter.api_doc_uri as apiDocUrl, inter.create_datetime
+        FROM interfaceinfo inter, system_info sys
+        WHERE inter.system_code=#{systemCode}
+        AND inter.system_code = sys.system_code
         <if test="queryStr != null  and queryStr !=''">
-            and API_code like concat('%',#{queryStr},'%')
+            and (inter.API_code like concat('%',#{queryStr},'%')
+            or inter.API_name like concat('%',#{queryStr},'%')
+            )
         </if>
     </select>
 
@@ -38,5 +41,12 @@
         SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
         FROM interfaceinfo
         WHERE id=#{id}
+    </select>
+
+    <select id="getInterfaceInfoByCode" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
+        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
+        FROM interfaceinfo
+        WHERE system_code=#{param1}
+        and API_code=#{param2}
     </select>
 </mapper>

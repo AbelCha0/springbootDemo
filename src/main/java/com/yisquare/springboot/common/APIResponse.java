@@ -23,15 +23,15 @@ public class APIResponse<T> implements Serializable {
 
 
     public static <T> APIResponse<T> success(T data){
-        APIResponse<T> apiResponse = new APIResponse();
+        APIResponse<T> apiResponse = new APIResponse<>();
         apiResponse.setStatus("success");
         apiResponse.setMsg("成功");
         apiResponse.setData(data);
         return apiResponse;
     }
 
-    public static <T> APIResponse fail(String msg, T data){
-        APIResponse<T> apiResponse = new APIResponse();
+    public static <T> APIResponse<T> fail(String msg, T data){
+        APIResponse<T> apiResponse = new APIResponse<>();
         apiResponse.setStatus("fail");
         apiResponse.setMsg(msg);
         apiResponse.setData(data);

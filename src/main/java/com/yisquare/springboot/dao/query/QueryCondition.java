@@ -17,7 +17,6 @@ public class QueryCondition {
     private Integer pageNum =1;
     @ApiModelProperty("一个分页的记录条数")
     private Integer pageSize = 20;
-    @NotBlank(message = "系统编码不能为空")
     @ApiModelProperty("系统编码")
     private String systemCode;
     @ApiModelProperty("Interface 编码或 Flow编码")

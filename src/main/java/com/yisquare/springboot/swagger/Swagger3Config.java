@@ -27,7 +27,7 @@ public class Swagger3Config {
         return new ApiInfoBuilder()
                 .title("Swagger3接口文档")
                 .description("更多请咨询服务开发者Abel。")
-                .contact(new Contact("Able", "http://www.baidu.com", "chaojun.xu@yisquare.com.cn"))
+                .contact(new Contact("Able", "http://yisquare.com.cn/", "chaojun.xu@yisquare.com.cn"))
                 .version("1.0")
                 .build();
     }

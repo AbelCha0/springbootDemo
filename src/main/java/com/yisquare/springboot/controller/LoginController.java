@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "登录")
 @RestController
 @Slf4j
+@RequestMapping("/api")
 public class LoginController {
 
     @Autowired
@@ -41,26 +42,14 @@ public class LoginController {
             APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
         }
         //用户认证信息
-
-        String userCode = loginDTO.getUserCode();
-        String password = PasswordProcess.makeMD5(loginDTO.getUserPassword());
-
-        APIResponse<User> userAPIResponse = userService.getUserInfo(userCode);
-
-        if("success".equals(userAPIResponse.getStatus()) ){
-            String secret = userAPIResponse.getData().getUserPassword();
-           if( secret.equals(password)) {
-               SysToken sysToken = shiroService.createToken(userCode);
-               return APIResponse.success(sysToken);
-           }
-           else{
-               return APIResponse.fail("账号或密码错误!",null);
-           }
-
-        }else{
-            return APIResponse.fail("账号或密码错误!",null);
+        User user = userService.login(loginDTO);
+        if(user!= null){
+            SysToken sysToken = shiroService.createToken(user.getUserCode());
+            sysToken.setUserName(user.getUserName());
+            return APIResponse.success(sysToken);
+        } else{
+            return APIResponse.fail("账号或者密码错误!",null);
         }
-
 
     }
 
@@ -72,10 +61,8 @@ public class LoginController {
         }
         String userCode =JwtUtil.getUserCode(token);
         if(!ObjectUtils.isEmpty(userCode)) {
-            APIResponse<User> userAPIResponse = userService.getUserInfo(userCode);
-            if(userAPIResponse.getStatus() == "success" && userCode.equals(userAPIResponse.getData().getUserCode())){
-                return shiroService.logout(token);
-            }
+            return shiroService.logout(token);
+
         }
         return APIResponse.fail("Token非法或者无效",null);
 

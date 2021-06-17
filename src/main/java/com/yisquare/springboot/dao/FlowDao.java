@@ -22,4 +22,6 @@ public interface FlowDao {
 
     Flow getFlowByID(int id);
 
+    Flow getFlowByCode(String systemCode, String flowName);
+
 }

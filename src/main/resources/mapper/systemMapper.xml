@@ -15,8 +15,10 @@
         from system_info systemInfo, system_user_relation relation
         where  systemInfo.system_code = relation.system_code
         and relation.member_code= #{operateUserCode}
-        <if test="systemCode != null and systemCode != ''">
-            and system_code like concat('%',#{systemCode},'%')
+        <if test="queryStr != null and queryStr != ''">
+            and ( systemInfo.system_code like concat('%',#{queryStr},'%')
+            or systemInfo.system_name like concat('%',#{queryStr},'%')
+            )
         </if>
 
 
@@ -30,6 +32,12 @@
     <if test="systemCode != null and systemCode != ''">
         system_code like concat('%',#{systemCode},'%')
     </if>
+        <if test="queryStr != null and queryStr != ''">
+            and ( system_code like concat('%',#{queryStr},'%')
+            or system_name like concat('%',#{queryStr},'%')
+            )
+
+        </if>
     </where>
     </select>
 
@@ -112,5 +120,11 @@
         and (role =1 or role =2)
         </if>
 
+    </select>
+
+    <select id="listAllSystemInfoByUserCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select distinct system_info.system_code as systemCode from system_info ,system_user_relation sur
+        where system_info.system_code = sur.system_code
+        and sur.member_code= #{userCode}
     </select>
 </mapper>

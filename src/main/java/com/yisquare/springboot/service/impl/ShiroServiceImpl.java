@@ -2,7 +2,6 @@ package com.yisquare.springboot.service.impl;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yisquare.springboot.common.APIResponse;
 import com.yisquare.springboot.common.JwtUtil;
 import com.yisquare.springboot.common.constraint.Operate;
@@ -13,6 +12,7 @@ import com.yisquare.springboot.pojo.SysToken;
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.ShiroService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -56,6 +56,9 @@ public class ShiroServiceImpl implements ShiroService {
 
     @Override
     public APIResponse<String> logout(String token) {
+        if(null == cache.getIfPresent(token)){
+            return APIResponse.fail("token失效",null);
+        }
         cache.invalidate(token);
         return APIResponse.success(null);
     }
@@ -65,7 +68,7 @@ public class ShiroServiceImpl implements ShiroService {
     @Override
     public int getRoleID(String userCode){
         Integer roleID = null ;
-        if("Admin".equals(userCode)){
+        if("admin".equalsIgnoreCase(userCode)){
             roleID = 0;
         }else {
             roleID = systemDao.getUserRole(userCode);

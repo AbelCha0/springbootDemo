@@ -11,18 +11,18 @@ import com.yisquare.springboot.pojo.*;
 import com.yisquare.springboot.service.ShiroService;
 import com.yisquare.springboot.service.SystemService;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class SystemServiceImpl implements SystemService {
-    @Autowired
+    @Resource
     private SystemDao systemDao;
 
-    @Autowired
+    @Resource
     private ShiroService shiroService;
 
     @Override
@@ -59,10 +59,10 @@ public class SystemServiceImpl implements SystemService {
         PageHelper.startPage(queryCondition.getPageNum(),queryCondition.getPageSize());
 
         if(shiroService.getRoleID(user.getUserCode()) == Role.SUPERADMIN.getRoleID()){//管理员查询所有的系统
-            return APIResponse.success(new PageInfo<SystemInfo>(systemDao.listAllSystemInfoByCode(queryCondition)));
+            return APIResponse.success(new PageInfo<>(systemDao.listAllSystemInfoByCode(queryCondition)));
         }else{//查询与自己权限相关的系统
             queryCondition.setOperateUserCode(user.getUserCode());
-            return APIResponse.success(new PageInfo<SystemInfo>(systemDao.listSystemInfoByCode(queryCondition)));
+            return APIResponse.success(new PageInfo<>(systemDao.listSystemInfoByCode(queryCondition)));
         }
 
     }
@@ -70,6 +70,11 @@ public class SystemServiceImpl implements SystemService {
     @Override
     @Transactional
     public APIResponse<Boolean> createSystemInfo(SystemInfo systemInfo) {
+
+        if(null != systemDao.getSystemInfoByCode(systemInfo.getSystemCode())){
+            return APIResponse.fail(String.format("系统编码%s已经存在.",systemInfo.getSystemCode()),null);
+        }
+
         int resultCode = systemDao.createSystemInfo(systemInfo);
         if(resultCode > 0) {
             String[] ipAddress = systemInfo.getIpAddress();
@@ -112,6 +117,11 @@ public class SystemServiceImpl implements SystemService {
         }else{
             return APIResponse.fail(String.format("你没有权限对%s进行该操作!",systemInfo.getSystemCode()),null);
         }
+    }
+
+    @Override
+    public APIResponse<List<String>> listSystemInfoByUserCode(String userCode) {
+        return APIResponse.success(systemDao.listAllSystemInfoByUserCode(userCode));
     }
 
 

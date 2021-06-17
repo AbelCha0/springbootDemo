@@ -59,7 +59,7 @@ public class JwtUtil {
         Algorithm algorithm = Algorithm.HMAC256(SECRET);
         return JWT.create()
                 .withClaim("userCode", userCode)
-                .withExpiresAt(date)
+               // .withExpiresAt(date)
                 .sign(algorithm);
 
     }
@@ -67,10 +67,9 @@ public class JwtUtil {
 //    public static void main(String[] args) throws Exception {
 //		 String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjMwNTk1MzAsInVzZXJDb2RlIjoiYWRtaW4ifQ.a4mNYdxGjADH2ND5mlWPN-mSCHmN4jGnZKzkuAQmzQo";
 //		 System.out.println(JwtUtil.getUserCode(token));
-//
-//        String token2 = JwtUtil.sign("admin", "e10Cadc3949ba59abbe56e057f20Cf883e");
-//        System.out.println(token);
-//        System.out.println( JwtUtil.verify(token2,"e10Cadc3949ba59abbe56e057f20Cf883e"));
+//        String token2 = JwtUtil.sign("admin");
+//        System.out.println( JwtUtil.verify(token));
+//        System.out.println( JwtUtil.verify(token2));
 //    }
 }
 

@@ -52,7 +52,7 @@ public class SystemController {
     @PutMapping(value="/system")
     public APIResponse updateSystemInfo(@RequestBody @Validated SystemInfo systemInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
+          return  APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
         }
         return systemService.updateSystemInfo(systemInfo);
     }
@@ -62,7 +62,7 @@ public class SystemController {
     @PostMapping(value="/system")
     public APIResponse createSystemInfo(@RequestBody @Validated SystemInfo systemInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
+           return APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
         }
         return systemService.createSystemInfo(systemInfo);
     }

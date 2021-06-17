@@ -2,11 +2,13 @@ package com.yisquare.springboot.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @ApiModel("登录信息")
+@AllArgsConstructor
 @Data
 public class LoginDTO {
     @ApiModelProperty("登录的用户编码")

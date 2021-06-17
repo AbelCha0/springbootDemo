@@ -12,11 +12,11 @@ public class PasswordProcess {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(plainText.getBytes());
-            byte b[] = md.digest();
+            byte bytes[] = md.digest();
             int i;
-            StringBuffer buf = new StringBuffer("");
-            for (int offset = 0; offset < b.length; offset++) {
-                i = b[offset];
+            StringBuilder buf = new StringBuilder();
+            for (int offset = 0; offset < bytes.length; offset++) {
+                i = bytes[offset];
                 if (i < 0)
                     i += 256;
                 if (i < 16)

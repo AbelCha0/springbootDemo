@@ -27,9 +27,9 @@ public class FlowServiceController {
     }
 
 
-    @ApiOperation("查询某个系统编码下所有FlowService")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
-    @GetMapping("/listFlow")
+    @ApiOperation("分页查询某个系统编码下所有FlowService")
+    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner","systemMember"},logical= Logical.OR)
+    @PostMapping("/listFlow")
     public APIResponse listFlow(@RequestBody QueryCondition queryCondition, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);

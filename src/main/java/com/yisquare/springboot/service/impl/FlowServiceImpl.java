@@ -9,17 +9,18 @@ import com.yisquare.springboot.dao.query.QueryCondition;
 import com.yisquare.springboot.pojo.Flow;
 import com.yisquare.springboot.service.FlowService;
 import com.yisquare.springboot.service.ShiroService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.List;
 
 
 @Service
 public class FlowServiceImpl implements FlowService {
-    @Autowired
+    @Resource
     private FlowDao flowDao;
 
-    @Autowired
+    @Resource
     private ShiroService shiroService;
 
     @Override
@@ -32,7 +33,18 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
+    public APIResponse<List<Flow>> listFlowBySystem(String systemCode) {
+        QueryCondition queryCondition = new QueryCondition();
+        queryCondition.setSystemCode(systemCode);
+        return APIResponse.success(flowDao.listFlowServiceByName(queryCondition));
+    }
+
+    @Override
     public APIResponse<Boolean> addFlow(Flow flow) {
+        if(null != flowDao.getFlowByCode(flow.getSystemCode(),flow.getFlowServiceName())){
+            return APIResponse.fail(String.format("系统编码%s下已经存在Flow %s.",flow.getSystemCode(),flow.getFlowServiceName()),null);
+        }
+
         if (shiroService.hasSystemPermit(flow.getSystemCode(), Operate.INSERT)) {
             int result = flowDao.addFlowService(flow);
             if (result == 0) {

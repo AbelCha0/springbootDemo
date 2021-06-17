@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK)
     public APIResponse sendErrorResponse_System(Exception exception){
         if (exception instanceof AuthorizationException) {
             return APIResponse.fail("你未登录或者没有权限访问！",null);

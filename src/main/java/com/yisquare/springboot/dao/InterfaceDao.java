@@ -22,4 +22,8 @@ public interface InterfaceDao {
 
     InterfaceInfo getInterfaceInfoByID(int id);
 
+    InterfaceInfo getInterfaceInfoByCode(String systemCode, String apiCode);
+
+
+
 }

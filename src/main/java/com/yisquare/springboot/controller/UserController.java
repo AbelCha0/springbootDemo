@@ -2,17 +2,21 @@ package com.yisquare.springboot.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.yisquare.springboot.common.APIResponse;
+import com.yisquare.springboot.common.PasswordProcess;
 import com.yisquare.springboot.dao.query.QueryCondition;
+import com.yisquare.springboot.dto.LoginDTO;
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 
-import io.swagger.annotations.ApiResponse;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -55,7 +59,10 @@ public class UserController {
     @ApiOperation("新增用户信息")
     @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
     @PostMapping(value = "/user",consumes = "application/json")
-    public APIResponse<User> createUser(@RequestBody User user){
+    public APIResponse<User> createUser(@RequestBody @Validated User user, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
+        }
         return userService.addUser(user);
     }
 
@@ -71,6 +78,22 @@ public class UserController {
     @PatchMapping(value = "/user",consumes = "application/json")
     public APIResponse<Boolean> updateUserByPatch(@RequestBody User user){
         return userService.updateUserByPatch(user);
+    }
+
+    @ApiOperation(value = "修改用户密码",notes = "修改用户密码")
+    @PostMapping(value = "/user",consumes = "application/x-www-form-urlencoded")
+    public APIResponse<Boolean> updateUserPassword(@RequestParam String oldPassword, @RequestParam String newPassword){
+        User loginUser = (User) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser != null){
+           User user = userService.login(new LoginDTO(loginUser.getUserCode(), oldPassword));
+           if(user!= null){
+               user.setUserPassword(PasswordProcess.makeMD5(newPassword));
+               userService.updateUserByPatch(user);
+               return APIResponse.success(null);
+           }
+        }
+            return APIResponse.fail("修改密码失败，请检查原密码是否正确。",null);
+
     }
 
 

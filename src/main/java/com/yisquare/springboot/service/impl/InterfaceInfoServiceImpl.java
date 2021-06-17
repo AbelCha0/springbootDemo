@@ -73,6 +73,10 @@ public class InterfaceInfoServiceImpl implements InterfaceInfoService {
 
     @Override
     public APIResponse<Boolean>  addInterfaceInfo(InterfaceInfo interfaceInfo) {
+        if(null != interfaceDao.getInterfaceInfoByCode(interfaceInfo.getSystemCode(),interfaceInfo.getApiCode())){
+            return APIResponse.fail(String.format("系统编码%s下已经存在接口%s.",interfaceInfo.getSystemCode(),interfaceInfo.getApiCode()),null);
+        }
+
         if (shiroService.hasSystemPermit(interfaceInfo.getSystemCode(), Operate.INSERT)) {
             int result = interfaceDao.addInterface(interfaceInfo);
             if (result == 0) {

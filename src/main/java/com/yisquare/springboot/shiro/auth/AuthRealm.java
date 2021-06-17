@@ -66,7 +66,7 @@ public class AuthRealm extends AuthorizingRealm {
          //获取token，既前端传入的token
         String accessToken = (String) token.getPrincipal();
         if(null == cache.getIfPresent(accessToken)){
-            throw new IncorrectCredentialsException("token不存在，请重新登录");
+            throw new IncorrectCredentialsException("token已经失效，请重新登录");
         }
         //2. token失效
         String userCode = JwtUtil.getUserCode(accessToken);

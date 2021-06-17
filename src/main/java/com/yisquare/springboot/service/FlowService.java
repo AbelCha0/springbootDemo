@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface FlowService {
 
-    APIResponse<PageInfo<Flow>>queryFlow(QueryCondition queryCondition);
+    APIResponse<PageInfo<Flow>> queryFlow(QueryCondition queryCondition);
+
+    APIResponse<List<Flow>> listFlowBySystem(String systemCode);
 
     APIResponse<Boolean> addFlow(Flow flow);
 
