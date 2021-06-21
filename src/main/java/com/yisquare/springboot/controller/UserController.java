@@ -77,11 +77,15 @@ public class UserController {
     @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
     @PatchMapping(value = "/user",consumes = "application/json")
     public APIResponse<Boolean> updateUserByPatch(@RequestBody User user){
+        String userPassword = user.getUserPassword();
+        if(null != userPassword) {
+            user.setUserPassword(PasswordProcess.makeMD5(userPassword));
+        }
         return userService.updateUserByPatch(user);
     }
 
     @ApiOperation(value = "修改用户密码",notes = "修改用户密码")
-    @PostMapping(value = "/user",consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/user/changePwd",consumes = "application/x-www-form-urlencoded")
     public APIResponse<Boolean> updateUserPassword(@RequestParam String oldPassword, @RequestParam String newPassword){
         User loginUser = (User) SecurityUtils.getSubject().getPrincipal();
         if(loginUser != null){

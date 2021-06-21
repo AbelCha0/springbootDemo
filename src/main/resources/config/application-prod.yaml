@@ -37,7 +37,7 @@ shiro:
   web:
     enabled: true
   loginUrl: /login
-springfox:
-  documentation:
-    swagger-ui:
-      enabled=true:
+swagger:
+  enable: false
+proxy:
+  path: http://192.168.0.142:12800/graphql

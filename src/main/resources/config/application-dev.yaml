@@ -10,9 +10,9 @@ spring:
       filter:
         enabled: true
   datasource:
-    url: jdbc:mysql://localhost:3306/skywalking?useSSL=false
+    url: jdbc:mysql://192.168.0.141:3306/skywalking?useSSL=false
     username: root
-    password: root
+    password: 123456
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
@@ -37,7 +37,7 @@ shiro:
   web:
     enabled: true
   loginUrl: /login
-springfox:
-  documentation:
-    swagger-ui:
-      enabled=true:
+swagger:
+  enable: true
+proxy:
+  path: http://192.168.0.142:12800/graphql

@@ -12,22 +12,14 @@ import com.yisquare.springboot.service.ShiroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 @Service
 public class InterfaceInfoServiceImpl implements InterfaceInfoService {
-
+    @Resource
     private InterfaceDao interfaceDao;
-
-
+    @Resource
     private ShiroService shiroService;
-
-    @Autowired
-    public void setInterfaceDao(InterfaceDao interfaceDao) {
-        this.interfaceDao = interfaceDao;
-    }
-    @Autowired
-    public void setShiroService(ShiroService shiroService){
-        this.shiroService =shiroService;
-    }
 
     @Override
     public APIResponse<PageInfo<InterfaceInfo>> listInterfaceInfo(QueryCondition queryCondition) {
