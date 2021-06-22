@@ -24,6 +24,6 @@ public class SysToken implements Serializable {
     private String token;
     @ApiModelProperty("过期时间")
     private LocalDateTime expireDateTime;
-    @ApiModelProperty("用户角色，0超级管理员，1系统管理员，2系统负责人，3普通用户")
+    @ApiModelProperty("用户角色，0超级管理员，1系统管理员，2普通用户")
     private int roleID;
 }

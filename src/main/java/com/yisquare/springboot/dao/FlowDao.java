@@ -14,12 +14,14 @@ import java.util.List;
 public interface FlowDao {
     List<Flow> listFlowServiceByName(QueryCondition QueryCondition);
 
-    int deleteFlowService(Flow flow);
+    int deleteFlowServiceByID(int id);
 
     int addFlowService(Flow flow);
 
     Flow getFlowByID(int id);
 
     Flow getFlowByCode(String systemCode, String flowName);
+
+    int getFlowCount(String systemCode);
 
 }

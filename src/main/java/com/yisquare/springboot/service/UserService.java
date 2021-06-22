@@ -12,7 +12,7 @@ public interface UserService {
 
     APIResponse<List<User>> listUsers();
 
-    APIResponse<PageInfo<User>> listUsersByUserCode(QueryCondition userQuery);
+    APIResponse<PageInfo<User>> queryUser(QueryCondition userQuery);
 
     APIResponse<User> getUserInfo(String userCode);
 

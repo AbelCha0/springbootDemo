@@ -29,7 +29,6 @@ public class InterfaceController {
 
     @ApiOperation("查询某系统编码下的所有API信息")
     @PostMapping ("/listInterface")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner","systemMember"},logical= Logical.OR)
     public APIResponse listInterfaceInfo(@RequestBody  @Validated QueryCondition queryCondition, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
@@ -40,14 +39,14 @@ public class InterfaceController {
 
     @ApiOperation("根据ID删除API")
     @DeleteMapping("/interface/{id}")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     public APIResponse deleteInterface(@PathVariable int id){
         return interfaceInfoService.deleteInterfaceInfo(id);
     }
 
     @ApiOperation("修改API信息")
     @PutMapping("interface")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     public APIResponse updateInterface(@RequestBody @Validated InterfaceInfo interfaceInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);
@@ -57,7 +56,7 @@ public class InterfaceController {
 
     @ApiOperation("创建API信息")
     @PostMapping("interface")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     public APIResponse createInterface(@RequestBody @Validated InterfaceInfo interfaceInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             APIResponse.fail(bindingResult.getFieldError().getDefaultMessage(),null);

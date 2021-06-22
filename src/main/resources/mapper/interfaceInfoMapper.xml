@@ -16,10 +16,9 @@
         </if>
     </select>
 
-    <delete id="deleteInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">
+    <delete id="deleteInterfaceByID" parameterType="int">
         DELETE FROM interfaceinfo
-        WHERE system_code=#{systemCode}
-        and API_code=#{apiCode};
+        WHERE id = #{id}
     </delete>
 
     <insert id="addInterface">
@@ -48,5 +47,9 @@
         FROM interfaceinfo
         WHERE system_code=#{param1}
         and API_code=#{param2}
+    </select>
+
+    <select id="getInterfaceCount" resultType="int">
+        select count(*) from interfaceinfo where system_code=#{systemCode} limit 1
     </select>
 </mapper>

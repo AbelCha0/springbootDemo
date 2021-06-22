@@ -19,7 +19,4 @@ public interface SystemService {
 
     APIResponse<Boolean> updateSystemInfo(SystemInfo systemInfo);
 
-    APIResponse<List<String>> listSystemInfoByUserCode(String userCode);
-
-
 }

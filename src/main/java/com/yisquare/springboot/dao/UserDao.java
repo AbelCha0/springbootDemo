@@ -12,7 +12,7 @@ public interface UserDao {
 
     List<User> listUsers();
 
-    List<User> listUsersByUserCode(QueryCondition userQuery);
+    List<User> queryUser(QueryCondition userQuery);
 
     User getUserInfo(String userCode);
 
@@ -24,6 +24,5 @@ public interface UserDao {
 
     int updateUserByPatch(User user);
 
-    int getSystemCodeByUserCode(String userCode);
 
 }

@@ -40,7 +40,7 @@ public class UserController {
     @ApiOperation("分页查询用户信息")
     @PostMapping(value = "/listUser", consumes = "application/json")
     public APIResponse<PageInfo<User>> queryUserByCode(@RequestBody QueryCondition userQuery){
-        return userService.listUsersByUserCode(userQuery);
+        return userService.queryUser(userQuery);
     }
 
     @ApiOperation("根据用户编码查询用户信息")
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @ApiOperation("新增用户信息")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PostMapping(value = "/user",consumes = "application/json")
     public APIResponse<User> createUser(@RequestBody @Validated User user, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -67,14 +67,14 @@ public class UserController {
     }
 
     @ApiOperation("PUT更新用户信息")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PutMapping(value = "/user",consumes = "application/json")
     public APIResponse<Boolean> updateUser(@RequestBody User user){
         return userService.updateUser(user);
     }
 
     @ApiOperation(value = "PATCH更新用户信息",notes = "传什么字段数据就修改什么数据，不传的字段不修改")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PatchMapping(value = "/user",consumes = "application/json")
     public APIResponse<Boolean> updateUserByPatch(@RequestBody User user){
         String userPassword = user.getUserPassword();
@@ -85,6 +85,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "修改用户密码",notes = "修改用户密码")
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PostMapping(value = "/user/changePwd",consumes = "application/x-www-form-urlencoded")
     public APIResponse<Boolean> updateUserPassword(@RequestParam String oldPassword, @RequestParam String newPassword){
         User loginUser = (User) SecurityUtils.getSubject().getPrincipal();

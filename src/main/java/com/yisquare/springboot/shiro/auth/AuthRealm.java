@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+
 
 public class AuthRealm extends AuthorizingRealm {
     @Autowired
@@ -41,20 +41,15 @@ public class AuthRealm extends AuthorizingRealm {
         User user = (User) principals.getPrimaryPrincipal();
         //2.添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        int roleID = shiroService.getRoleID(user.getUserCode());
+        int roleID = user.getRoleID();
         switch (roleID) {
             case  0:
                 simpleAuthorizationInfo.addRole(Role.SUPERADMIN.getRoleName());
-
                 break;
             case 1:
                 simpleAuthorizationInfo.addRole(Role.SYSADMIN.getRoleName());
-
                 break;
             case 2:
-                simpleAuthorizationInfo.addRole(Role.SYSOWNER.getRoleName());
-                break;
-            case 3:
                 simpleAuthorizationInfo.addRole(Role.SYSMEMBER.getRoleName());
                 break;
         }

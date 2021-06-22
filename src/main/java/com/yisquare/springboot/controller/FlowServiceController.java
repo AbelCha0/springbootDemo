@@ -28,7 +28,6 @@ public class FlowServiceController {
 
 
     @ApiOperation("分页查询某个系统编码下所有FlowService")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner","systemMember"},logical= Logical.OR)
     @PostMapping("/listFlow")
     public APIResponse listFlow(@RequestBody QueryCondition queryCondition, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -38,7 +37,7 @@ public class FlowServiceController {
     }
 
     @ApiOperation("删除FlowService")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @DeleteMapping("/flow/{id}")
     public APIResponse deleteFlowByID(@PathVariable  int id){
         return flowService.deleteFlow(id);
@@ -47,7 +46,7 @@ public class FlowServiceController {
 
 
     @ApiOperation("新建FlowService")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PostMapping("/flow")
     public APIResponse createFlow(@RequestBody Flow flow, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {

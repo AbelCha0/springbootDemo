@@ -48,7 +48,7 @@ public class SystemController {
     }
 
     @ApiOperation("更新系统信息")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PutMapping(value="/system")
     public APIResponse updateSystemInfo(@RequestBody @Validated SystemInfo systemInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -58,7 +58,7 @@ public class SystemController {
     }
 
     @ApiOperation("新建系统")
-    @RequiresRoles(value = {"superAdmin","systemAdmin","systemOwner"},logical= Logical.OR)
+    @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     @PostMapping(value="/system")
     public APIResponse createSystemInfo(@RequestBody @Validated SystemInfo systemInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {

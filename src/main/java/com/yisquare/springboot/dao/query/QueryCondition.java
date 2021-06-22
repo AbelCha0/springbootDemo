@@ -17,9 +17,9 @@ public class QueryCondition {
     private Integer pageNum =1;
     @ApiModelProperty("一个分页的记录条数")
     private Integer pageSize = 20;
-    @ApiModelProperty("系统编码")
+    @ApiModelProperty("系统编码，查询接口和FlowService使用")
     private String systemCode;
-    @ApiModelProperty("Interface 编码或 Flow编码")
+    @ApiModelProperty("查询关键字")
     private String queryStr;
     private String operateUserCode;
 }

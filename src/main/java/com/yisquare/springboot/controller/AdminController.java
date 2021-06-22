@@ -23,16 +23,10 @@ public class AdminController {
 
     @GetMapping(value = "getFlowBySystemCode/{systemCode}")
     public APIResponse<List<Flow>> listFlow(@PathVariable String systemCode){
-
         return flowService.listFlowBySystem(systemCode);
     }
 
 
-    @GetMapping(value = "getSystemCodeByUserCode/{userCode}")
-    public APIResponse<List<String>> listSystemCodeByUserCode(@PathVariable String userCode){
-
-        return systemService.listSystemInfoByUserCode(userCode);
-    }
 
 
 

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,8 +26,19 @@ public class SystemInfo implements Serializable {
     private String department;
     @ApiModelProperty("系统创建时间")
     private String createDatetime;
-    @ApiModelProperty("系统成员")
-    private List<SystemMember> systemMember;
+    @ApiModelProperty("负责人姓名")
+    @NotBlank(message = "负责人不能为空")
+    private String owner;
+    @ApiModelProperty("负责人电话")
+    @NotEmpty(message = "电话不能为空")
+    @Pattern(regexp = "^1[0-9]{10}$", message = "手机号不合法")
+    private String ownerPhone;
+    @ApiModelProperty("负责人邮件")
+    @NotNull(message = "邮箱地址不能为空")
+    @Email(message = "请输入正确的邮箱地址")
+    private String ownerEmail;
+    @ApiModelProperty("系统注册人")
+    private String registerUserName;
     @ApiModelProperty("系统IP地址")
     private String[] ipAddress;
 }

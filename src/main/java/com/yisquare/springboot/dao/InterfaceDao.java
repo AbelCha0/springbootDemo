@@ -13,7 +13,7 @@ public interface InterfaceDao {
 
     List<InterfaceInfo>  listInterface(QueryCondition queryCondition);
 
-    int deleteInterface(InterfaceInfo interfaceInfo);
+    int deleteInterfaceByID(int id);
 
     int addInterface(InterfaceInfo interfaceInfo);
 
@@ -23,6 +23,7 @@ public interface InterfaceDao {
 
     InterfaceInfo getInterfaceInfoByCode(String systemCode, String apiCode);
 
+    int getInterfaceCount(String systemCode);
 
 
 }

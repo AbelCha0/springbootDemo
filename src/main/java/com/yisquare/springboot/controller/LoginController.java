@@ -3,22 +3,21 @@ package com.yisquare.springboot.controller;
 
 import com.yisquare.springboot.common.APIResponse;
 import com.yisquare.springboot.common.JwtUtil;
-import com.yisquare.springboot.common.PasswordProcess;
 import com.yisquare.springboot.dto.LoginDTO;
 import com.yisquare.springboot.pojo.SysToken;
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.ShiroService;
-import com.yisquare.springboot.service.SystemService;
 import com.yisquare.springboot.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 
 @Api(tags = "登录")
@@ -27,10 +26,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class LoginController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
-    @Autowired
+    @Resource
     private ShiroService shiroService;
 
 
@@ -44,8 +43,7 @@ public class LoginController {
         //用户认证信息
         User user = userService.login(loginDTO);
         if(user!= null){
-            SysToken sysToken = shiroService.createToken(user.getUserCode());
-            sysToken.setUserName(user.getUserName());
+            SysToken sysToken = shiroService.createToken(user);
             return APIResponse.success(sysToken);
         } else{
             return APIResponse.fail("账号或者密码错误!",null);

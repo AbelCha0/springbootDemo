@@ -4,19 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yisquare.springboot.dao.UserDao">
     <select id="listUsers" resultType="com.yisquare.springboot.pojo.User">
-        select  user_code as userCode, user_name as userName, user_password as userPassword,phone,email,create_datetime as createDateTime from user;
+        select  user_code as userCode, user_name as userName, user_password as userPassword,phone,email,role_id as roleID ,create_datetime as createDateTime from user;
     </select>
 
     <select id="getUserInfo" resultType="com.yisquare.springboot.pojo.User">
-        select  user_code as userCode, user_name as userName, user_password as userPassword,phone,email,create_datetime as createDateTime from user
+        select  user_code as userCode, user_name as userName, user_password as userPassword,phone,email,role_id as roleID ,create_datetime as createDateTime from user
          where user_code = #{userCode};
     </select>
 
-    <select id="listUsersByUserCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.User">
-        select user_code,user_name, phone,email,create_datetime from user
+    <select id="queryUser" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.User">
+        select user_code,user_name, phone,email,role_id as roleID ,create_datetime from user
         <where>
-            <if test ="systemCode != null and systemCode != ''">
-                and `user_code` like concat('%',#{systemCode},'%')
+            <if test ="queryStr != null and queryStr != ''">
+                and (`user_code` like concat('%',#{queryStr},'%') or `user_name` like concat('%',#{queryStr},'%') )
             </if>
         </where>
     </select>
@@ -26,15 +26,15 @@
     </delete>
 
     <insert id="addUser" parameterType="com.yisquare.springboot.pojo.User"  >
-        insert into user(user_code, user_name,user_password,phone,email) values (#{userCode},#{userName},#{userPassword},#{phone},#{email})
+        insert into user(user_code, user_name,user_password,phone,email,role_id) values (#{userCode},#{userName},#{userPassword},#{phone},#{email},#{roleID})
     </insert>
 
     <update id="updateUser" parameterType="com.yisquare.springboot.pojo.User">
         update user set
         user_name = #{userName},
-        user_password = #{userPassword},
         email = #{email},
-        phone = #{phone}
+        phone = #{phone},
+        role_id = #{roleID}
         where user_code = #{userCode}
     </update>
 
@@ -51,13 +51,13 @@
             email = #{email},
         </if>
         <if test = "phone != null">
-            phone = #{phone}
+            phone = #{phone},
         </if>
+         <if test = "phone != null">
+             role_id = #{roleID}
+          </if>
         </set>
         where user_code = #{userCode}
     </update>
 
-    <select id="getSystemCodeByUserCode" parameterType="java.lang.String" resultType="int">
-        select count(1) from system_user_relation where member_code=#{userCode};
-    </select>
 </mapper>

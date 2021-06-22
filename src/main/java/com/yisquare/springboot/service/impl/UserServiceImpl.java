@@ -26,11 +26,11 @@ public class UserServiceImpl implements UserService {
         return APIResponse.success(userDao.listUsers());
     }
 
-    //根据userCode查询用户，如果不输入条件，则查询所有用户
+    //根据userCode或用户名查询用户，如果不输入条件，则查询所有用户
     @Override
-    public APIResponse<PageInfo<User>> listUsersByUserCode(QueryCondition userQuery) {
+    public APIResponse<PageInfo<User>> queryUser(QueryCondition userQuery) {
         PageHelper.startPage(userQuery.getPageNum(),userQuery.getPageSize());
-        return  APIResponse.success(new PageInfo<>(userDao.listUsersByUserCode(userQuery)));
+        return  APIResponse.success(new PageInfo<>(userDao.queryUser(userQuery)));
     }
 
     @Override
@@ -41,10 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public APIResponse<Boolean> deleteUserByCode(String userCode) {
-        int j = userDao.getSystemCodeByUserCode(userCode);
-        if(j > 0){
-            return APIResponse.fail("用户存在关联的系统，不能删除",null);
-        }
+
         int i  = userDao.deleteUserByCode(userCode);
         if(i >0) {
             return APIResponse.success(true);

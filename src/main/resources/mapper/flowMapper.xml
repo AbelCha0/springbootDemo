@@ -14,10 +14,9 @@
         </if>
     </select>
 
-    <delete id="deleteFlowService"  parameterType="com.yisquare.springboot.pojo.Flow">
+    <delete id="deleteFlowServiceByID"  parameterType="int">
         DELETE FROM flowservice
-        WHERE system_code = #{systemCode}
-        and  flowservice_name = #{flowServiceName}
+        WHERE id = #{id}
     </delete>
 
     <insert id="addFlowService" parameterType="com.yisquare.springboot.pojo.Flow">
@@ -37,5 +36,9 @@
         FROM flowservice
         WHERE system_code = #{param1}
         and flowservice_name = #{param2}
+    </select>
+
+    <select id="getFlowCount" resultType="int">
+        select count(*) from flowservice where system_code=#{systemCode} limit 1
     </select>
 </mapper>
