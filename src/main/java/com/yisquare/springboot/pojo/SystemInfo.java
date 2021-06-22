@@ -37,8 +37,8 @@ public class SystemInfo implements Serializable {
     @NotNull(message = "邮箱地址不能为空")
     @Email(message = "请输入正确的邮箱地址")
     private String ownerEmail;
-    @ApiModelProperty("系统注册人")
-    private String registerUserName;
+    @ApiModelProperty("系统创建人")
+    private String createUser;
     @ApiModelProperty("系统IP地址")
     private String[] ipAddress;
 }
