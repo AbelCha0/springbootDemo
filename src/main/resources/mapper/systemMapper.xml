@@ -5,14 +5,14 @@
 <mapper namespace="com.yisquare.springboot.dao.SystemDao">
     <select id="getSystemInfoByCode" parameterType="java.lang.String" resultMap="systemInfoMap">
         select
-        distinct system_code, system_name, department, owner, owner_phone, owner_email, register_user_name,create_datetime
+        distinct system_code, system_name, department, owner, owner_phone, owner_email, create_user,create_datetime
         from system_info
         where  system_code = #{systemCode};
     </select>
 
     <select id="listSystemInfoByCode" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultMap="systemInfoMap">
     select
-    system_code, system_name, department, owner, owner_phone, owner_email, register_user_name,create_datetime
+    system_code, system_name, department, owner, owner_phone, owner_email, create_user,create_datetime
     from system_info
     <where>
         <if test="queryStr != null and queryStr != ''">
@@ -35,7 +35,7 @@
         <result property="owner" column="owner"/>
         <result property="ownerPhone" column="owner_phone"/>
         <result property="ownerEmail" column="owner_email"/>
-        <result property="registerUserName" column="register_user_name"/>
+        <result property="createUser" column="create_user"/>
         <result property="createDatetime" column="create_datetime"/>
         <collection property="ipAddress" ofType="java.lang.String"  select ="getIpInfo" column="system_code"></collection>
     </resultMap>
@@ -51,8 +51,8 @@
     </delete>
 
     <insert id="createSystemInfo" parameterType="com.yisquare.springboot.pojo.SystemInfo">
-        insert into system_info (system_code, system_name, department, owner, owner_phone, owner_email, register_user_name)
-        values (#{systemCode},#{systemName},#{department},#{owner},#{ownerPhone},#{ownerEmail},#{registerUserName});
+        insert into system_info (system_code, system_name, department, owner, owner_phone, owner_email, create_user)
+        values (#{systemCode},#{systemName},#{department},#{owner},#{ownerPhone},#{ownerEmail},#{createUser});
     </insert>
 
     <insert id="insertSystemIP" >

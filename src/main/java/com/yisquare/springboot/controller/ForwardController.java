@@ -1,6 +1,8 @@
 package com.yisquare.springboot.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.http.*;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-
+@Api(tags ="graphql分发")
 @Controller
 @RequestMapping(value = "/api")
 public class ForwardController {
@@ -33,6 +35,7 @@ public class ForwardController {
     @Value("${proxy.path}")
     private String url;
 
+    @ApiOperation("分发graphql的服务")
     @PostMapping(value = "/graphql")
     public void forwardGraphql(HttpServletRequest request, HttpServletResponse response) {
 

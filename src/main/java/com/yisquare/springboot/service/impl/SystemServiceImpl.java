@@ -9,6 +9,7 @@ import com.yisquare.springboot.dao.SystemDao;
 import com.yisquare.springboot.dao.query.QueryCondition;
 import com.yisquare.springboot.pojo.*;
 import com.yisquare.springboot.service.SystemService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
@@ -64,6 +65,9 @@ public class SystemServiceImpl implements SystemService {
         if(null != systemDao.getSystemInfoByCode(systemInfo.getSystemCode())){
             return APIResponse.fail(String.format("系统编码%s已经存在.",systemInfo.getSystemCode()),null);
         }
+
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        systemInfo.setCreateUser(user.getUserName());
 
         int resultCode = systemDao.createSystemInfo(systemInfo);
         if(resultCode > 0) {

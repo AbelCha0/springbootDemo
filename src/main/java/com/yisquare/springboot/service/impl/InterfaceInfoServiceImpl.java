@@ -7,7 +7,10 @@ import com.yisquare.springboot.dao.InterfaceDao;
 import com.yisquare.springboot.dao.SystemDao;
 import com.yisquare.springboot.dao.query.QueryCondition;
 import com.yisquare.springboot.pojo.InterfaceInfo;
+import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.InterfaceInfoService;
+import org.apache.catalina.security.SecurityUtil;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -66,6 +69,8 @@ public class InterfaceInfoServiceImpl implements InterfaceInfoService {
         if (null != interfaceDao.getInterfaceInfoByCode(interfaceInfo.getSystemCode(), interfaceInfo.getApiCode())) {
             return APIResponse.fail(String.format("系统编码%s下已经存在接口%s.", interfaceInfo.getSystemCode(), interfaceInfo.getApiCode()), null);
         }
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        interfaceInfo.setCreateUser(user.getUserName());
 
         int result = interfaceDao.addInterface(interfaceInfo);
         if (result == 0) {

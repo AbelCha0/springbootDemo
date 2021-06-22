@@ -45,7 +45,7 @@ public class InterfaceController {
     }
 
     @ApiOperation("修改API信息")
-    @PutMapping("interface")
+    @PutMapping("/interface")
     @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     public APIResponse updateInterface(@RequestBody @Validated InterfaceInfo interfaceInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -55,7 +55,7 @@ public class InterfaceController {
     }
 
     @ApiOperation("创建API信息")
-    @PostMapping("interface")
+    @PostMapping("/interface")
     @RequiresRoles(value = {"superAdmin","systemAdmin"},logical= Logical.OR)
     public APIResponse createInterface(@RequestBody @Validated InterfaceInfo interfaceInfo, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {

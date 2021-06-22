@@ -5,7 +5,8 @@
 <mapper namespace="com.yisquare.springboot.dao.InterfaceDao">
 
     <select id="listInterface" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT inter.id,inter.system_code as systemCode, sys.system_name as systemName ,inter.API_code as apiCode, inter.API_name as apiName, inter.version, inter.api_doc_uri as apiDocUrl, inter.create_datetime
+        SELECT inter.id,inter.system_code as systemCode, sys.system_name as systemName ,inter.API_code as apiCode, inter.API_name as apiName, inter.version, inter.api_doc_uri as apiDocUrl,
+        inter.status,inter.create_user as createUser,  inter.create_datetime
         FROM interfaceinfo inter, system_info sys
         WHERE inter.system_code=#{systemCode}
         AND inter.system_code = sys.system_code
@@ -23,27 +24,27 @@
 
     <insert id="addInterface">
         INSERT INTO interfaceinfo
-                (system_code, API_code, API_name, version, api_doc_uri)
-        VALUES(#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl});
+                (system_code, API_code, API_name, version, api_doc_uri,status,create_user)
+        VALUES(#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl},#{status},#{createUser});
 
     </insert>
 
     <update id="updateInterface">
         UPDATE interfaceinfo
-        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl}
+        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl},status=#{status},create_user=#{createUser}
         WHERE system_code=#{systemCode}
         and API_code=#{apiCode};
 
     </update>
 
     <select id="getInterfaceInfoByID" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
+        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl,status,create_user, create_datetime
         FROM interfaceinfo
         WHERE id=#{id}
     </select>
 
     <select id="getInterfaceInfoByCode" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, create_datetime
+        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, status,create_user, create_datetime
         FROM interfaceinfo
         WHERE system_code=#{param1}
         and API_code=#{param2}

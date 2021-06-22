@@ -4,8 +4,6 @@ package com.yisquare.springboot.service.impl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.yisquare.springboot.common.APIResponse;
 import com.yisquare.springboot.common.JwtUtil;
-import com.yisquare.springboot.dao.SystemDao;
-import com.yisquare.springboot.dao.TokenDao;
 import com.yisquare.springboot.pojo.SysToken;
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.ShiroService;
@@ -19,12 +17,6 @@ import java.time.LocalDateTime;
 public class ShiroServiceImpl implements ShiroService {
 
     private final static int EXPIRE = 12;
-
-    @Resource
-    private TokenDao tokenDao;
-
-    @Resource
-    private SystemDao systemDao;
 
     @Resource
     private Cache cache;
