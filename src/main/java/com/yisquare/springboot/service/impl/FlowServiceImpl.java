@@ -31,10 +31,10 @@ public class FlowServiceImpl implements FlowService {
 
 
     @Override
-    public APIResponse<List<Flow>> listFlowBySystem(String systemCode) {
+    public List<Flow> listFlowBySystem(String systemCode) {
         QueryCondition queryCondition = new QueryCondition();
         queryCondition.setSystemCode(systemCode);
-        return APIResponse.success(flowDao.listFlowServiceByName(queryCondition));
+        return flowDao.listFlowServiceByName(queryCondition);
     }
 
     @Override

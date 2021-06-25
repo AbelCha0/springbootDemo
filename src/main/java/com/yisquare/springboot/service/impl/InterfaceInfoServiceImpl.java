@@ -14,6 +14,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class InterfaceInfoServiceImpl implements InterfaceInfoService {
@@ -28,6 +29,13 @@ public class InterfaceInfoServiceImpl implements InterfaceInfoService {
         PageHelper.startPage(queryCondition.getPageNum(),queryCondition.getPageSize());
         return APIResponse.success(new PageInfo<>(interfaceDao.listInterface(queryCondition)));
 
+    }
+
+    @Override
+    public List<InterfaceInfo> listInterfaceInfoBySysCode(String systemCode) {
+        QueryCondition queryCondition = new QueryCondition();
+        queryCondition.setSystemCode(systemCode);
+        return interfaceDao.listInterface(queryCondition);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.yisquare.springboot.dto.LoginDTO;
 
 import com.yisquare.springboot.pojo.User;
 import com.yisquare.springboot.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public APIResponse<Boolean> deleteUserByCode(String userCode) {
+        if("admin".equalsIgnoreCase(userCode)){
+            return APIResponse.fail("不能删除Admin用户",false);
+        }
 
         int i  = userDao.deleteUserByCode(userCode);
         if(i >0) {
@@ -78,6 +82,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public APIResponse<Boolean> updateUserByPatch(User user) {
+        User operator = (User) SecurityUtils.getSubject().getPrincipal();
+        if("admin".equalsIgnoreCase(user.getUserCode()) && user.getUserPassword() != null && !operator.getUserCode().equalsIgnoreCase(user.getUserCode())){
+            return APIResponse.fail("你无法重置Admin的密码",false);
+        }
+
         int i = userDao.updateUserByPatch(user);
         if(i>0) {
             return APIResponse.success(true);

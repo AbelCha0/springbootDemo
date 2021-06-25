@@ -11,7 +11,7 @@ public interface FlowService {
 
     APIResponse<PageInfo<Flow>> queryFlow(QueryCondition queryCondition);
 
-    APIResponse<List<Flow>> listFlowBySystem(String systemCode);
+    List<Flow> listFlowBySystem(String systemCode);
 
     APIResponse<Boolean> addFlow(Flow flow);
 

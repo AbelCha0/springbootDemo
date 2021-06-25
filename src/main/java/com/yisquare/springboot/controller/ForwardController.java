@@ -3,8 +3,8 @@ package com.yisquare.springboot.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import org.apache.http.*;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 
 import org.apache.http.entity.InputStreamEntity;

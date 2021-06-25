@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yisquare.springboot.dao.InterfaceDao">
+    <cache></cache>
 
     <select id="listInterface" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
         SELECT inter.id,inter.system_code as systemCode, sys.system_name as systemName ,inter.API_code as apiCode, inter.API_name as apiName, inter.version, inter.api_doc_uri as apiDocUrl,
@@ -22,16 +23,16 @@
         WHERE id = #{id}
     </delete>
 
-    <insert id="addInterface">
+    <insert id="addInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">>
         INSERT INTO interfaceinfo
                 (system_code, API_code, API_name, version, api_doc_uri,status,create_user)
         VALUES(#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl},#{status},#{createUser});
 
     </insert>
 
-    <update id="updateInterface">
+    <update id="updateInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">
         UPDATE interfaceinfo
-        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl},status=#{status},create_user=#{createUser}
+        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl},status=#{status}
         WHERE system_code=#{systemCode}
         and API_code=#{apiCode};
 

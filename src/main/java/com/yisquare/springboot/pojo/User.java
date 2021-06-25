@@ -37,7 +37,7 @@ public class User implements Serializable {
     @Email(message = "请输入正确的邮箱地址")
     private String email;
     @Min(value = 1,message = "角色ID的值为1或者2")
-    @Min(value = 2,message = "角色ID的值为1或者2")
+    @Max(value = 2,message = "角色ID的值为1或者2")
     @ApiModelProperty("用户角色，1系统管理员，2普通用户")
     private int roleID;
     @ApiModelProperty("创建时间")
