@@ -23,10 +23,10 @@
         WHERE id = #{id}
     </delete>
 
-    <insert id="addInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">>
+    <insert id="addInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">
         INSERT INTO interfaceinfo
-                (system_code, API_code, API_name, version, api_doc_uri,status,create_user)
-        VALUES(#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl},#{status},#{createUser});
+                (system_code, API_code, API_name, version, api_doc_uri,`status`,create_user)
+        VALUES (#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl},#{status},#{createUser});
 
     </insert>
 
