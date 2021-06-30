@@ -1,0 +1,111 @@
+.rk-login {
+    height: 100%
+}
+
+.rk-login .title {
+    font-weight: bolder;
+    font-family: Avenir, Helvetica, Arial, sans-serif
+}
+
+.rk-img-wrapper {
+    width: 100%;
+    height: 100%;
+    -webkit-animation: spin 100s linear infinite;
+    animation: spin 100s linear infinite;
+    background-size: 100%;
+    background-position: 50%
+}
+
+.rk-img-logo {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    margin-left: -150px
+}
+
+.rk-login-input {
+    width: 100%;
+    border: 0;
+    font-size: 16px;
+    border-bottom: 1px solid #e4e7ed;
+    padding: 2px .2em 5px;
+    transition: border-color .3s
+}
+
+.rk-login-input:focus {
+    outline: none;
+    border-color: #6399f7
+}
+
+.rk-login-form-wrapper {
+    display: table-cell;
+    vertical-align: middle
+}
+
+.rocket {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 50%;
+    left: 50%;
+    margin-top: -60px;
+    margin-left: -60px
+}
+
+.rk-login-form {
+    max-width: 360px;
+    margin: 0 auto;
+    padding-bottom: 30px
+}
+
+.rk-login-form .dscp {
+    margin-bottom: 30px
+}
+
+.rk-login-l {
+    padding: 0 40px;
+    height: 100%;
+    display: table;
+    flex-shrink: 0;
+    margin: 0 auto
+}
+
+.rk-login-r {
+    position: relative;
+    height: 100%;
+    width: 61.8%;
+    background-color: #21272b;
+    overflow: hidden;
+    background-image: url(../img/bg.25485589.jpg);
+    background-size: cover
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn)
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn)
+    }
+}
+
+.rk-login-btn {
+    padding: 8px 2em
+}
+
+.rk-login-red {
+    border-color: #f76363
+}
