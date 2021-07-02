@@ -4,18 +4,16 @@ import com.yisquare.springboot.common.APIResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@RestControllerAdvice(annotations = RestController.class)
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public APIResponse sendErrorResponse_System(Exception exception){
         if (exception instanceof AuthorizationException) {
             return APIResponse.fail("你未登录或者没有权限访问！",null);
