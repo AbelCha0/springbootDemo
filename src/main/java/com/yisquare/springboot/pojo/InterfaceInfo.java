@@ -22,8 +22,8 @@ public class InterfaceInfo implements Serializable {
     @ApiModelProperty("系统编码")
     @NotBlank(message = "系统编码不能为空")
     private String systemCode;
-    @ApiModelProperty("系统名称")
-    private String systemName;
+    @ApiModelProperty("关联系统编码")
+    private String relationSystemCode;
     @ApiModelProperty("API编码")
     @NotBlank(message = "API编码不能为空")
     private String apiCode;
@@ -43,6 +43,8 @@ public class InterfaceInfo implements Serializable {
     private int status;
     @ApiModelProperty("创建者")
     private String createUser;
+    @ApiModelProperty("创建时间")
+    private String createDateTime;
 
 
 

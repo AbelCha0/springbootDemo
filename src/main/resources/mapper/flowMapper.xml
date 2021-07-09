@@ -5,10 +5,9 @@
 <mapper namespace="com.yisquare.springboot.dao.FlowDao">
     <cache></cache>
     <select id="listFlowServiceByName" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.Flow">
-        SELECT  flow.id ,flow.system_code,sys.system_name, flow.flowservice_name, flow.description, flow.create_datetime
-        FROM flowservice flow, system_info sys
+        SELECT  flow.id ,flow.system_code, flow.flowservice_name, flow.description, flow.create_datetime
+        FROM flowservice flow
         WHERE flow.system_code = #{systemCode}
-        AND flow.system_code = sys.system_code
         <if test="queryStr != null  and queryStr !=''">
             and flow.flowservice_name like concat('%',#{queryStr},'%')
         </if>

@@ -4,13 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yisquare.springboot.dao.InterfaceDao">
     <cache></cache>
+    
+    <resultMap id="interfaceInfo" type="com.yisquare.springboot.pojo.InterfaceInfo">
+        <id property="id" column="id"/>
+        <result property="systemCode" column="system_code"/>
+        <result property="relationSystemCode" column="relation_system_code"/>
+        <result property="apiCode" column="API_code"/>
+        <result property="apiName" column="API_name"/>
+        <result property="apiDocUrl" column="api_doc_uri"/>
+        <result property="version" column="version"/>
+        <result property="status" column="status"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createDateTime" column="create_datetime"/>
+    </resultMap>
 
-    <select id="listInterface" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT inter.id,inter.system_code as systemCode, sys.system_name as systemName ,inter.API_code as apiCode, inter.API_name as apiName, inter.version, inter.api_doc_uri as apiDocUrl,
-        inter.status,inter.create_user as createUser,  inter.create_datetime
-        FROM interfaceinfo inter, system_info sys
+    <select id="listInterface" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultMap="interfaceInfo">
+        SELECT inter.id, inter.system_code  ,inter.relation_system_code ,inter.API_code , inter.API_name, inter.version, inter.api_doc_uri ,
+        inter.status,inter.create_user,  inter.create_datetime
+        FROM interfaceinfo inter
         WHERE inter.system_code=#{systemCode}
-        AND inter.system_code = sys.system_code
         <if test="queryStr != null  and queryStr !=''">
             and (inter.API_code like concat('%',#{queryStr},'%')
             or inter.API_name like concat('%',#{queryStr},'%')
@@ -25,27 +37,27 @@
 
     <insert id="addInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">
         INSERT INTO interfaceinfo
-                (system_code, API_code, API_name, version, api_doc_uri,`status`,create_user)
-        VALUES (#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl},#{status},#{createUser});
+                (system_code, API_code, API_name, version, api_doc_uri,`status`,create_user,relation_system_code)
+        VALUES (#{systemCode}, #{apiCode}, #{apiName}, #{version}, #{apiDocUrl},#{status},#{createUser},#{relationSystemCode});
 
     </insert>
 
     <update id="updateInterface" parameterType="com.yisquare.springboot.pojo.InterfaceInfo">
         UPDATE interfaceinfo
-        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl},status=#{status}
+        SET API_name=#{apiName}, version=#{version}, api_doc_uri=#{apiDocUrl},status=#{status},relation_system_code=#{relationSystemCode}
         WHERE system_code=#{systemCode}
         and API_code=#{apiCode};
 
     </update>
 
     <select id="getInterfaceInfoByID" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl,status,create_user, create_datetime
+        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl,status,create_user, create_datetime,relation_system_code as relationSystemCode
         FROM interfaceinfo
         WHERE id=#{id}
     </select>
 
     <select id="getInterfaceInfoByCode" resultType="com.yisquare.springboot.pojo.InterfaceInfo">
-        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, status,create_user, create_datetime
+        SELECT id,system_code as systemCode, API_code as apiCode, API_name as apiName, version, api_doc_uri as apiDocUrl, status,create_user, create_datetime,relation_system_code as relationSystemCode
         FROM interfaceinfo
         WHERE system_code=#{param1}
         and API_code=#{param2}

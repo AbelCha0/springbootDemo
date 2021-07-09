@@ -20,8 +20,6 @@ public class Flow implements Serializable {
     @ApiModelProperty("系统编码")
     @NotBlank(message = "系统编码不能为空")
     private String systemCode;
-    @ApiModelProperty("系统名称")
-    private String systemName;
     @ApiModelProperty("FlowService限定名")
     @NotBlank(message = "FlowService不能为空")
     private String flowServiceName;
