@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yisquare.springboot.dao.InterfaceDao">
-    <cache></cache>
+    <cache/>
     
     <resultMap id="interfaceInfo" type="com.yisquare.springboot.pojo.InterfaceInfo">
         <id property="id" column="id"/>

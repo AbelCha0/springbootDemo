@@ -6,6 +6,8 @@ import com.yisquare.springboot.pojo.InterfaceInfo;
 import com.yisquare.springboot.service.FlowService;
 import com.yisquare.springboot.service.InterfaceInfoService;
 
+import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Resource
     private InterfaceInfoService interfaceInfoService;
+
+    @Resource
+    private StringEncryptor stringEncryptor;
 
     @GetMapping(value = "getFlowBySystemCode/{systemCode}")
     public List<String> listFlow(@PathVariable String systemCode){
@@ -46,6 +51,13 @@ public class AdminController {
        return result;
 
     }
+
+    @GetMapping(value="encrypt/{text}")
+    public String encrypt(@PathVariable String text){
+        return stringEncryptor.encrypt(text);
+
+    }
+
 
 
 

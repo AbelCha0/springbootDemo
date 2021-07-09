@@ -35,7 +35,7 @@ public class InterfaceInfo implements Serializable {
     private String version;
     @ApiModelProperty("API文档地址")
     //@NotBlank(message = "api文档地址不能为空")
-    @Pattern(regexp = "^(http|https):\\/\\/([\\w.]+\\/?)\\S*", message = "api文档地址必须是http或者https开头的地址")
+    @Pattern(regexp = "^(http|https):([\\w.]+?)\\S*", message = "api文档地址必须是http或者https开头的地址")
     private String apiDocUrl;
     @ApiModelProperty("接口状态，0启用，1禁用")
     @Min(value = 0,message = "接口状态的值为0或者2")

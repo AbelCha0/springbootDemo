@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yisquare.springboot.dao.FlowDao">
-    <cache></cache>
+    <cache/>
     <select id="listFlowServiceByName" parameterType="com.yisquare.springboot.dao.query.QueryCondition" resultType="com.yisquare.springboot.pojo.Flow">
         SELECT  flow.id ,flow.system_code, flow.flowservice_name, flow.description, flow.create_datetime
         FROM flowservice flow
